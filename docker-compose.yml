@@ -1,0 +1,14 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: child-learning
+    image: srv08.mikr.us:30358/child-learning
+    ports:
+      - "3000:80"
+    volumes:
+      - ./src:/app/src
+    environment:
+      - NODE_ENV=development
+    restart: unless-stopped

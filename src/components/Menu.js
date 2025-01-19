@@ -1,10 +1,23 @@
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './Menu.css';
 
 function Menu() {
-  const [randomize, setRandomize] = useState(false);
-  const [testMode, setTestMode] = useState(false);
+  const [randomize, setRandomize] = useState(() =>
+    JSON.parse(localStorage.getItem('randomize') || 'false')
+  );
+  const [testMode, setTestMode] = useState(() =>
+    JSON.parse(localStorage.getItem('testMode') || 'false')
+  );
+  const [quizCount, setQuizCount] = useState(() =>
+    JSON.parse(localStorage.getItem('quizCount') || '2')
+  );
+
+  useEffect(() => {
+    localStorage.setItem('randomize', JSON.stringify(randomize));
+    localStorage.setItem('testMode', JSON.stringify(testMode));
+    localStorage.setItem('quizCount', JSON.stringify(quizCount));
+  }, [randomize, testMode, quizCount]);
 
   const baseItems = [
     { label: 'Numbers 0-10', path: '/learn?start=0&stop=10' },
@@ -17,13 +30,16 @@ function Menu() {
   ];
 
   const getPath = (basePath) => {
-    if (basePath === '/colors') return testMode ? '/colorsQuiz' : basePath;
+    if (basePath === '/colors') {
+      return testMode
+        ? `/colorsQuiz?count=${quizCount}`
+        : basePath;
+    }
     if (!basePath.startsWith('/learn')) return basePath;
 
-    // Redirect to LearnQuiz component when in test mode
     if (testMode) {
       const params = new URLSearchParams(basePath.split('?')[1]);
-      return `/learnQuiz?${params.toString()}`;
+      return `/learnQuiz?${params.toString()}&count=${quizCount}`;
     }
 
     return `${basePath}${randomize ? '&randomize=1' : ''}`;
@@ -52,6 +68,20 @@ function Menu() {
             {testMode ? 'Test' : 'Learn'}
           </label>
         </div>
+
+        {testMode && (
+          <label className="option-label">
+            Number of items:
+            <input
+              type="number"
+              className="form-control"
+              min="2"
+              value={quizCount}
+              onChange={(e) => setQuizCount(Number(e.target.value))}
+              style={{ width: '4rem' }}
+            />
+          </label>
+        )}
       </div>
 
       {baseItems.map((item, index) => (

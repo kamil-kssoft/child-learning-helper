@@ -5,5 +5,7 @@ export const colors = [
   '#FFFF00', // Yellow
   '#FFFFFF', // White
   '#000000', // Black
-  '#FFA500'  // Orange
+  '#FFA500', // Orange
+  '#800080', // Purple
+  '#8B4513'  // Brown
 ];

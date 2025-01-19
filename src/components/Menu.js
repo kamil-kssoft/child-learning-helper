@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import './Menu.css';
+import { shuffleArrayWithSubitems } from '../utils/arrayUtils';
 
 function Menu() {
   const [randomize, setRandomize] = useState(() =>
@@ -26,23 +27,14 @@ function Menu() {
     { label: 'Letters I-P', path: '/learn?start=I&stop=P' },
     { label: 'Letters R-Z', path: '/learn?start=R&stop=Z' },
     { label: 'Letters A-Z', path: '/learn?start=A&stop=Z' },
-    { label: 'Colors', path: '/colors' },
+    { label: 'Colors', path: '/colors?a=1' },
+    { label: 'Animals', path: '/image?a=1' },
   ];
 
   const getPath = (basePath) => {
-    if (basePath === '/colors') {
-      return testMode
-        ? `/colorsQuiz?count=${quizCount}`
-        : basePath;
-    }
-    if (!basePath.startsWith('/learn')) return basePath;
-
-    if (testMode) {
-      const params = new URLSearchParams(basePath.split('?')[1]);
-      return `/learnQuiz?${params.toString()}&count=${quizCount}`;
-    }
-
-    return `${basePath}${randomize ? '&randomize=1' : ''}`;
+    const randomizeMode = randomize ? 1 : 0;
+    const count = testMode ? quizCount : 1;
+    return `${basePath}&count=${count}&randomize=${randomizeMode}`;
   };
 
   return (

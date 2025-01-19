@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 function Learn() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentValue, setCurrentValue] = useState(null);
+  const [randomizedValues, setRandomizedValues] = useState([]);
 
   const getValueSet = () => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -38,15 +39,26 @@ function Learn() {
     return start.split(',').map(word => word.trim());
   };
 
-  const getRandomValue = () => {
-    let newValue;
-    do {
-      const randomIndex = Math.floor(Math.random() * values.length);
-      newValue = values[randomIndex];
-    } while (newValue === currentValue);
-    return newValue;
+  const shuffleArray = (array) => {
+    const newArray = [...array];
+    for (let i = newArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+    return newArray;
   };
 
+  const getRandomValue = () => {
+    if (randomizedValues.length === 0) {
+      const newRandomized = shuffleArray(values.filter(v => v !== currentValue));
+      setRandomizedValues(newRandomized);
+      return newRandomized[0];
+    }
+
+    const [nextValue, ...remaining] = randomizedValues;
+    setRandomizedValues(remaining);
+    return nextValue;
+  };
 
   const values = getValueSet();
   const shouldRandomize = new URLSearchParams(window.location.search).get('randomize') === '1';
@@ -62,6 +74,9 @@ function Learn() {
   };
 
   useEffect(() => {
+    if (shouldRandomize) {
+      setRandomizedValues(shuffleArray(values));
+    }
     setCurrentValue(values[0]);
   }, []);
 

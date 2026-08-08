@@ -12,14 +12,14 @@ function Image() {
       getItemLabel={getItemLabel}
       categoryLabel="zwierzę"
       renderContent={(item) => ({
-        style: {
-          backgroundImage: `url(/img/${item})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          minHeight: '400px',
-          minWidth: '400px',
-        },
+        content: (
+          <img
+            className="tile-image"
+            src={`/img/${item}`}
+            alt={getItemLabel(item)}
+            draggable={false}
+          />
+        ),
       })}
     />
   );

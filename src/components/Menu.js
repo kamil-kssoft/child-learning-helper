@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import './Menu.css';
-import { shuffleArrayWithSubitems } from '../utils/arrayUtils';
 
 function Menu() {
   const [randomize, setRandomize] = useState(() =>
@@ -21,14 +20,14 @@ function Menu() {
   }, [randomize, testMode, quizCount]);
 
   const baseItems = [
-    { label: 'Numbers 0-10', path: '/learn?start=0&stop=10' },
-    { label: 'Numbers 0-20', path: '/learn?start=0&stop=20' },
-    { label: 'Letters A-H', path: '/learn?start=A&stop=H' },
-    { label: 'Letters I-P', path: '/learn?start=I&stop=P' },
-    { label: 'Letters R-Z', path: '/learn?start=R&stop=Z' },
-    { label: 'Letters A-Z', path: '/learn?start=A&stop=Z' },
-    { label: 'Colors', path: '/colors?a=1' },
-    { label: 'Animals', path: '/image?a=1' },
+    { label: 'Liczby 0–10', icon: '🔢', path: '/learn?start=0&stop=10' },
+    { label: 'Liczby 0–20', icon: '🔢', path: '/learn?start=0&stop=20' },
+    { label: 'Litery A–H', icon: '🔤', path: '/learn?start=A&stop=H' },
+    { label: 'Litery I–P', icon: '🔤', path: '/learn?start=I&stop=P' },
+    { label: 'Litery R–Z', icon: '🔤', path: '/learn?start=R&stop=Z' },
+    { label: 'Litery A–Z', icon: '🔤', path: '/learn?start=A&stop=Z' },
+    { label: 'Kolory', icon: '🎨', path: '/colors?a=1' },
+    { label: 'Zwierzęta', icon: '🐾', path: '/image?a=1' },
   ];
 
   const getPath = (basePath) => {
@@ -39,6 +38,8 @@ function Menu() {
 
   return (
     <div className="menu-container">
+      <h1 className="menu-title">🌈 Zabawa w naukę</h1>
+
       <div className="options-container">
         <label className="option-label">
           <input
@@ -46,7 +47,7 @@ function Menu() {
             checked={randomize}
             onChange={(e) => setRandomize(e.target.checked)}
           />
-          Randomize order
+          Losuj kolejność
         </label>
         <div className="form-check form-switch option-label">
           <input
@@ -57,17 +58,18 @@ function Menu() {
             onChange={(e) => setTestMode(e.target.checked)}
           />
           <label className="form-check-label" htmlFor="testModeSwitch">
-            {testMode ? 'Test' : 'Learn'}
+            {testMode ? 'Quiz' : 'Ucz się'}
           </label>
         </div>
 
         {testMode && (
           <label className="option-label">
-            Number of items:
+            Liczba elementów:
             <input
               type="number"
               className="form-control"
               min="2"
+              max="6"
               value={quizCount}
               onChange={(e) => setQuizCount(Number(e.target.value))}
               style={{ width: '4rem' }}
@@ -82,6 +84,7 @@ function Menu() {
           to={getPath(item.path)}
           className="menu-item"
         >
+          <span className="menu-icon">{item.icon}</span>
           {item.label}
         </Link>
       ))}

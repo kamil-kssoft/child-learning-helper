@@ -1,0 +1,101 @@
+.feedback-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  z-index: 50;
+}
+
+.feedback-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 2rem 3rem;
+  border-radius: 1.5rem;
+  animation: feedback-pop 0.4s ease;
+}
+
+.feedback-success .feedback-content {
+  background-color: rgba(76, 175, 80, 0.95);
+  color: white;
+}
+
+.feedback-wrong .feedback-content {
+  background-color: rgba(255, 152, 0, 0.95);
+  color: white;
+  animation: feedback-shake 0.5s ease;
+}
+
+.feedback-emoji {
+  font-size: 4rem;
+}
+
+.feedback-text {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+@keyframes feedback-pop {
+  0% { transform: scale(0.5); opacity: 0; }
+  70% { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes feedback-shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-10px); }
+  40%, 80% { transform: translateX(10px); }
+}
+
+.confetti-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.confetti-piece {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  top: -10px;
+  left: calc(var(--i) * 5%);
+  background-color: hsl(calc(var(--i) * 18), 80%, 55%);
+  border-radius: 2px;
+  animation: confetti-fall 1.2s ease-out forwards;
+  animation-delay: calc(var(--i) * 0.03s);
+}
+
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+.tile-wrong {
+  animation: tile-shake 0.4s ease;
+}
+
+@keyframes tile-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
+}
+
+.tile-correct {
+  animation: tile-bounce 0.4s ease;
+  box-shadow: 0 0 20px rgba(76, 175, 80, 0.8) !important;
+}
+
+@keyframes tile-bounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}

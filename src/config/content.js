@@ -49,9 +49,67 @@ function getLetterLabel(value) {
   return letterLabels[value.toUpperCase()] || value;
 }
 
+const shapeItems = [
+  { value: 'circle', label: 'koło' },
+  { value: 'square', label: 'kwadrat' },
+  { value: 'triangle', label: 'trójkąt' },
+  { value: 'star', label: 'gwiazda' },
+  { value: 'heart', label: 'serce' },
+  { value: 'rectangle', label: 'prostokąt' },
+];
+
+const fruitItems = [
+  { value: '🍎', label: 'jabłko' },
+  { value: '🍌', label: 'banan' },
+  { value: '🍐', label: 'gruszka' },
+  { value: '🍊', label: 'pomarańcza' },
+  { value: '🍓', label: 'truskawka' },
+  { value: '🍇', label: 'winogrono' },
+  { value: '🍉', label: 'arbuz' },
+  { value: '🍒', label: 'wiśnia' },
+];
+
+const vehicleItems = [
+  { value: '🚗', label: 'samochód' },
+  { value: '🚌', label: 'autobus' },
+  { value: '🚂', label: 'pociąg' },
+  { value: '🚢', label: 'statek' },
+  { value: '✈️', label: 'samolot' },
+  { value: '🚁', label: 'helikopter' },
+  { value: '🚲', label: 'rower' },
+  { value: '🚒', label: 'wóz strażacki' },
+];
+
+const emotionItems = [
+  { value: '😊', label: 'szczęśliwy' },
+  { value: '😢', label: 'smutny' },
+  { value: '😮', label: 'zaskoczony' },
+  { value: '😠', label: 'zły' },
+  { value: '😴', label: 'śpiący' },
+  { value: '🤩', label: 'zachwycony' },
+];
+
+const countingItems = [
+  { value: 'count-1-star', label: 'jeden', count: 1, emoji: '⭐' },
+  { value: 'count-2-apple', label: 'dwa', count: 2, emoji: '🍎' },
+  { value: 'count-3-ball', label: 'trzy', count: 3, emoji: '⚽' },
+  { value: 'count-4-flower', label: 'cztery', count: 4, emoji: '🌸' },
+  { value: 'count-5-star', label: 'pięć', count: 5, emoji: '⭐' },
+  { value: 'count-6-heart', label: 'sześć', count: 6, emoji: '❤️' },
+  { value: 'count-7-ball', label: 'siedem', count: 7, emoji: '🎾' },
+  { value: 'count-8-flower', label: 'osiem', count: 8, emoji: '🌼' },
+  { value: 'count-9-star', label: 'dziewięć', count: 9, emoji: '✨' },
+  { value: 'count-10-apple', label: 'dziesięć', count: 10, emoji: '🍏' },
+];
+
 export {
   colorItems,
   animalItems,
+  shapeItems,
+  fruitItems,
+  vehicleItems,
+  emotionItems,
+  countingItems,
   getNumberLabel,
   getLetterLabel,
 };

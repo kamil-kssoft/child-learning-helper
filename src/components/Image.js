@@ -1,12 +1,16 @@
 import { BaseItem } from './BaseItem';
-import { animals } from '../config/colors';
+import { animalItems } from '../config/content';
 
 function Image() {
-  const values = animals;
+  const values = animalItems.map((a) => a.value);
+  const getItemLabel = (filename) =>
+    animalItems.find((a) => a.value === filename)?.label || filename;
 
   return (
     <BaseItem
       values={values}
+      getItemLabel={getItemLabel}
+      categoryLabel="zwierzę"
       renderContent={(item) => ({
         style: {
           backgroundImage: `url(/img/${item})`,
@@ -14,8 +18,8 @@ function Image() {
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
           minHeight: '400px',
-          minWidth: '400px'
-        }
+          minWidth: '400px',
+        },
       })}
     />
   );

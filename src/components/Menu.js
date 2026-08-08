@@ -23,12 +23,9 @@ function Menu() {
     {
       title: 'Podstawy',
       items: [
-        { label: 'Liczby 0–10', icon: '🔢', path: '/learn?start=0&stop=10' },
-        { label: 'Liczby 0–20', icon: '🔢', path: '/learn?start=0&stop=20' },
-        { label: 'Litery A–H', icon: '🔤', path: '/learn?start=A&stop=H' },
-        { label: 'Litery I–P', icon: '🔤', path: '/learn?start=I&stop=P' },
-        { label: 'Litery R–Z', icon: '🔤', path: '/learn?start=R&stop=Z' },
-        { label: 'Litery A–Z', icon: '🔤', path: '/learn?start=A&stop=Z' },
+        { label: 'Cyfry 0–40', icon: '🔢', path: '/learn?start=0&stop=40' },
+        { label: 'Wielkie litery A–Z', icon: '🔤', path: '/learn?start=A&stop=Z' },
+        { label: 'Małe litery a–z', icon: '🔡', path: '/learn?start=a&stop=z' },
         { label: 'Kolory', icon: '🎨', path: '/colors?a=1' },
       ],
     },

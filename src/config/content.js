@@ -33,12 +33,20 @@ const numberLabels = {
   10: 'dziesięć', 11: 'jedenaście', 12: 'dwanaście', 13: 'trzynaście',
   14: 'czternaście', 15: 'piętnaście', 16: 'szesnaście', 17: 'siedemnaście',
   18: 'osiemnaście', 19: 'dziewiętnaście', 20: 'dwadzieścia',
+  21: 'dwadzieścia jeden', 22: 'dwadzieścia dwa', 23: 'dwadzieścia trzy',
+  24: 'dwadzieścia cztery', 25: 'dwadzieścia pięć', 26: 'dwadzieścia sześć',
+  27: 'dwadzieścia siedem', 28: 'dwadzieścia osiem', 29: 'dwadzieścia dziewięć',
+  30: 'trzydzieści', 31: 'trzydzieści jeden', 32: 'trzydzieści dwa',
+  33: 'trzydzieści trzy', 34: 'trzydzieści cztery', 35: 'trzydzieści pięć',
+  36: 'trzydzieści sześć', 37: 'trzydzieści siedem', 38: 'trzydzieści osiem',
+  39: 'trzydzieści dziewięć', 40: 'czterdzieści',
 };
 
 const letterLabels = {
   A: 'a', B: 'be', C: 'ce', D: 'de', E: 'e', F: 'ef', G: 'gie', H: 'ha',
   I: 'i', J: 'jot', K: 'ka', L: 'el', M: 'em', N: 'en', O: 'o', P: 'pe',
-  R: 'er', S: 'es', T: 'te', U: 'u', W: 'wu', Y: 'y', Z: 'zet',
+  Q: 'ku', R: 'er', S: 'es', T: 'te', U: 'u', V: 've', W: 'wu', X: 'eks',
+  Y: 'y', Z: 'zet',
 };
 
 function getNumberLabel(value) {

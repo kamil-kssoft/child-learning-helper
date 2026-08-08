@@ -1,16 +1,43 @@
 {
   "short_name": "Zabawa",
-  "name": "Zabawa w naukę",
+  "name": "Zabawa — nauka dla dzieci",
+  "description": "Aplikacja edukacyjna: liczby, litery, kolory i zwierzęta",
   "icons": [
     {
       "src": "favicon.ico",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
+    },
+    {
+      "src": "logo192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any"
+    },
+    {
+      "src": "logo512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any"
+    },
+    {
+      "src": "logo192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "maskable"
+    },
+    {
+      "src": "logo512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "maskable"
     }
   ],
-  "start_url": ".",
+  "start_url": "/menu",
+  "scope": "/",
   "display": "standalone",
-  "theme_color": "#4a90d9",
+  "orientation": "portrait",
+  "theme_color": "#007bff",
   "background_color": "#ffffff",
   "lang": "pl"
 }

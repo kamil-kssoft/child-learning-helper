@@ -10,6 +10,9 @@ RUN npm run build
 # Production stage
 FROM nginx:alpine
 
+# SPA + PWA routing and cache headers
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 # Copy built files from build stage to nginx
 COPY --from=build /app/build /usr/share/nginx/html
 

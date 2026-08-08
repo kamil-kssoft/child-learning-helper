@@ -102,32 +102,6 @@ const countingItems = [
   { value: 'count-10-apple', label: 'dziesięć', count: 10, emoji: '🍏' },
 ];
 
-const carBrandItems = [
-  { value: 'audi.svg', label: 'Audi' },
-  { value: 'bmw.svg', label: 'BMW' },
-  { value: 'mercedes.svg', label: 'Mercedes' },
-  { value: 'volkswagen.svg', label: 'Volkswagen' },
-  { value: 'toyota.svg', label: 'Toyota' },
-  { value: 'skoda.svg', label: 'Skoda' },
-  { value: 'ford.svg', label: 'Ford' },
-  { value: 'opel.svg', label: 'Opel' },
-  { value: 'renault.svg', label: 'Renault' },
-  { value: 'peugeot.svg', label: 'Peugeot' },
-  { value: 'citroen.svg', label: 'Citroën' },
-  { value: 'fiat.svg', label: 'Fiat' },
-  { value: 'kia.svg', label: 'Kia' },
-  { value: 'hyundai.svg', label: 'Hyundai' },
-  { value: 'nissan.svg', label: 'Nissan' },
-  { value: 'mazda.svg', label: 'Mazda' },
-  { value: 'volvo.svg', label: 'Volvo' },
-  { value: 'seat.svg', label: 'Seat' },
-  { value: 'dacia.svg', label: 'Dacia' },
-  { value: 'honda.svg', label: 'Honda' },
-  { value: 'suzuki.svg', label: 'Suzuki' },
-  { value: 'jeep.svg', label: 'Jeep' },
-  { value: 'tesla.svg', label: 'Tesla' },
-];
-
 export {
   colorItems,
   animalItems,
@@ -136,7 +110,6 @@ export {
   vehicleItems,
   emotionItems,
   countingItems,
-  carBrandItems,
   getNumberLabel,
   getLetterLabel,
 };

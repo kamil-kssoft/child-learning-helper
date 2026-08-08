@@ -8,7 +8,6 @@ import Fruits from './components/Fruits';
 import Vehicles from './components/Vehicles';
 import Emotions from './components/Emotions';
 import Counting from './components/Counting';
-import CarBrands from './components/CarBrands';
 import './App.css';
 
 function App() {
@@ -24,7 +23,6 @@ function App() {
         <Route path="/vehicles" element={<Vehicles />} />
         <Route path="/emotions" element={<Emotions />} />
         <Route path="/counting" element={<Counting />} />
-        <Route path="/car-brands" element={<CarBrands />} />
         <Route path="*" element={<Navigate to="/menu" />} />
       </Routes>
     </Router>

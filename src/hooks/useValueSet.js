@@ -6,9 +6,9 @@ export function useValueSet() {
     const start = urlParams.get('start');
     const stop = urlParams.get('stop');
 
-    // If no start/stop provided, return range 1-10
+    // If no start/stop provided, return range 0-40
     if (!start || !stop) {
-      return Array.from({ length: 10 }, (_, i) => String(i + 1));
+      return Array.from({ length: 41 }, (_, i) => String(i));
     }
 
     // Handle numeric ranges

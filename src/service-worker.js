@@ -8,11 +8,11 @@ import {
 } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
 import { CacheFirst, StaleWhileRevalidate } from 'workbox-strategies';
-import { animals } from './config/colors';
+import { animalFilenames } from './config/content';
 
 clientsClaim();
 
-const ANIMAL_IMAGES = animals.map((file) => `/img/${file}`);
+const ANIMAL_IMAGES = animalFilenames.map((file) => `/img/${file}`);
 
 precacheAndRoute(
   self.__WB_MANIFEST.concat(

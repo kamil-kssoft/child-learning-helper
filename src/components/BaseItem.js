@@ -6,10 +6,18 @@ import Feedback from './Feedback';
 import './Feedback.css';
 import './BaseItem.css';
 
+function buildQuizPrompt(label, categoryLabel) {
+  if (categoryLabel) {
+    return `Znajdź ${categoryLabel}: ${label}`;
+  }
+  return `Znajdź ${label}`;
+}
+
 export function BaseItem({ values, style, renderContent, getItemLabel, categoryLabel = '' }) {
   const queryParams = new URLSearchParams(window.location.search);
-  const tilesCount = parseInt(queryParams.get('count') || '1', 10);
+  const requestedTilesCount = parseInt(queryParams.get('count') || '1', 10);
   const randomize = queryParams.get('randomize') === '1';
+  const tilesCount = Math.min(requestedTilesCount, values.length);
   const isQuizMode = tilesCount > 1;
 
   const [currentSequences, setCurrentSequences] = useState([]);
@@ -18,6 +26,7 @@ export function BaseItem({ values, style, renderContent, getItemLabel, categoryL
   const [feedback, setFeedback] = useState(null);
   const [wrongTileIdx, setWrongTileIdx] = useState(null);
   const [isLocked, setIsLocked] = useState(false);
+  const [isAdvancing, setIsAdvancing] = useState(false);
 
   const { speak, playSuccess, playWrong } = useAudio();
   const feedbackTimeoutRef = useRef(null);
@@ -28,14 +37,16 @@ export function BaseItem({ values, style, renderContent, getItemLabel, categoryL
   );
 
   const generateValues = useCallback(() => {
-    if (values.length < tilesCount) return;
+    if (values.length < 2 && requestedTilesCount > 1) return;
+    if (values.length === 0) return;
+
     const currentSet = generateArrayWithSubitems(values, tilesCount, randomize);
     setCurrentSequences(currentSet);
     setCurrentSequenceIdx(0);
     if (isQuizMode) {
       setCorrectIndex(Math.floor(Math.random() * tilesCount));
     }
-  }, [values, tilesCount, randomize, isQuizMode]);
+  }, [values, tilesCount, randomize, isQuizMode, requestedTilesCount]);
 
   useEffect(() => {
     generateValues();
@@ -61,11 +72,11 @@ export function BaseItem({ values, style, renderContent, getItemLabel, categoryL
   useEffect(() => {
     if (isQuizMode && correctItem) {
       const timer = setTimeout(() => {
-        speak(`Znajdź ${labelFor(correctItem)}`);
+        speak(buildQuizPrompt(labelFor(correctItem), categoryLabel));
       }, 400);
       return () => clearTimeout(timer);
     }
-  }, [isQuizMode, correctItem, currentSequenceIdx, correctIndex, speak, labelFor]);
+  }, [isQuizMode, correctItem, currentSequenceIdx, correctIndex, speak, labelFor, categoryLabel]);
 
   useEffect(() => {
     return () => {
@@ -99,12 +110,17 @@ export function BaseItem({ values, style, renderContent, getItemLabel, categoryL
     }, type === 'success' ? 1200 : 800);
   }, []);
 
-  const handleLearnClick = useCallback(() => {
-    if (currentItems.length > 0) {
-      speak(labelFor(currentItems[0]));
+  const handleLearnClick = useCallback(async () => {
+    if (isAdvancing || currentItems.length === 0) return;
+
+    setIsAdvancing(true);
+    try {
+      await speak(labelFor(currentItems[0]));
+      advanceToNext();
+    } finally {
+      setIsAdvancing(false);
     }
-    advanceToNext();
-  }, [currentItems, speak, labelFor, advanceToNext]);
+  }, [isAdvancing, currentItems, speak, labelFor, advanceToNext]);
 
   const handleQuizClick = useCallback(
     (tileIdx) => {
@@ -127,6 +143,26 @@ export function BaseItem({ values, style, renderContent, getItemLabel, categoryL
 
   const handleTileClick = isQuizMode ? handleQuizClick : () => handleLearnClick();
 
+  if (values.length === 0) {
+    return (
+      <div className="base-item-container">
+        <BackButton />
+        <p className="base-item-message">Brak elementów do nauki.</p>
+      </div>
+    );
+  }
+
+  if (requestedTilesCount > 1 && values.length < 2) {
+    return (
+      <div className="base-item-container">
+        <BackButton />
+        <p className="base-item-message">
+          Za mało elementów do quizu. Wyłącz tryb quizu w menu.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="base-item-container">
       <BackButton />
@@ -134,20 +170,13 @@ export function BaseItem({ values, style, renderContent, getItemLabel, categoryL
 
       {isQuizMode && correctLabel && (
         <div className="quiz-prompt">
-          Znajdź: <strong>{correctLabel}</strong>
+          Znajdź{categoryLabel ? ` ${categoryLabel}` : ''}: <strong>{correctLabel}</strong>
         </div>
       )}
 
       <div
+        className="base-item-tiles"
         style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          gap: '20px',
-          flex: 1,
-          width: '100%',
-          padding: '20px',
           paddingTop: isQuizMode ? '80px' : '60px',
           ...style,
         }}
@@ -161,27 +190,10 @@ export function BaseItem({ values, style, renderContent, getItemLabel, categoryL
 
             return (
               <div
-                key={idx}
+                key={`${currentSequenceIdx}-${currentItem}`}
                 onClick={() => handleTileClick(idx)}
-                className={`${isWrong ? 'tile-wrong' : ''} ${isCorrect ? 'tile-correct' : ''}`}
-                style={{
-                  flex: '1 1 calc(200px)',
-                  maxWidth: '400px',
-                  maxHeight: '400px',
-                  minWidth: '200px',
-                  minHeight: '200px',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  fontSize: 'min(20vw, 20vh)',
-                  cursor: 'pointer',
-                  userSelect: 'none',
-                  border: '3px solid #ccc',
-                  borderRadius: '16px',
-                  backgroundColor: '#f8f9fa',
-                  overflow: 'hidden',
-                  ...itemStyle,
-                }}
+                className={`base-item-tile ${isWrong ? 'tile-wrong' : ''} ${isCorrect ? 'tile-correct' : ''} ${!isQuizMode && isAdvancing ? 'tile-waiting' : ''}`}
+                style={itemStyle}
               >
                 {content}
               </div>

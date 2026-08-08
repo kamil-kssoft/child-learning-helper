@@ -1,4 +1,7 @@
 import { useCallback, useRef } from 'react';
+import { getSoundEnabled, getSpeechRate } from '../utils/audioSettings';
+
+const LEARN_SILENCE_MS = 700;
 
 function playTone(audioContext, frequency, startTime, duration, type = 'sine', volume = 0.3) {
   const oscillator = audioContext.createOscillator();
@@ -16,6 +19,12 @@ function playTone(audioContext, frequency, startTime, duration, type = 'sine', v
   oscillator.stop(startTime + duration);
 }
 
+function delay(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
 export function useAudio() {
   const audioContextRef = useRef(null);
 
@@ -23,21 +32,40 @@ export function useAudio() {
     if (!audioContextRef.current) {
       audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
     }
+    if (audioContextRef.current.state === 'suspended') {
+      audioContextRef.current.resume();
+    }
     return audioContextRef.current;
   }, []);
 
   const speak = useCallback((text) => {
-    if (!text || !('speechSynthesis' in window)) return;
+    if (!text) {
+      return Promise.resolve();
+    }
 
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'pl-PL';
-    utterance.rate = 0.85;
-    utterance.pitch = 1.1;
-    window.speechSynthesis.speak(utterance);
+    if (!getSoundEnabled()) {
+      return delay(LEARN_SILENCE_MS);
+    }
+
+    if (!('speechSynthesis' in window)) {
+      return delay(LEARN_SILENCE_MS);
+    }
+
+    return new Promise((resolve) => {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'pl-PL';
+      utterance.rate = getSpeechRate();
+      utterance.pitch = 1.1;
+      utterance.onend = () => resolve();
+      utterance.onerror = () => resolve();
+      window.speechSynthesis.speak(utterance);
+    });
   }, []);
 
   const playSuccess = useCallback(() => {
+    if (!getSoundEnabled()) return;
+
     try {
       const ctx = getAudioContext();
       const now = ctx.currentTime;
@@ -50,6 +78,8 @@ export function useAudio() {
   }, [getAudioContext]);
 
   const playWrong = useCallback(() => {
+    if (!getSoundEnabled()) return;
+
     try {
       const ctx = getAudioContext();
       const now = ctx.currentTime;

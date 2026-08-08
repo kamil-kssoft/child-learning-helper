@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { DEFAULT_SPEECH_RATE } from '../utils/audioSettings';
 import './Menu.css';
 
 function Menu() {
@@ -12,12 +13,20 @@ function Menu() {
   const [quizCount, setQuizCount] = useState(() =>
     JSON.parse(localStorage.getItem('quizCount') || '2')
   );
+  const [soundEnabled, setSoundEnabled] = useState(() =>
+    JSON.parse(localStorage.getItem('soundEnabled') ?? 'true')
+  );
+  const [speechRate, setSpeechRate] = useState(() =>
+    JSON.parse(localStorage.getItem('speechRate') ?? String(DEFAULT_SPEECH_RATE))
+  );
 
   useEffect(() => {
     localStorage.setItem('randomize', JSON.stringify(randomize));
     localStorage.setItem('testMode', JSON.stringify(testMode));
     localStorage.setItem('quizCount', JSON.stringify(quizCount));
-  }, [randomize, testMode, quizCount]);
+    localStorage.setItem('soundEnabled', JSON.stringify(soundEnabled));
+    localStorage.setItem('speechRate', JSON.stringify(speechRate));
+  }, [randomize, testMode, quizCount, soundEnabled, speechRate]);
 
   const menuSections = [
     {
@@ -103,6 +112,28 @@ function Menu() {
             />
           </label>
         )}
+
+        <label className="option-label">
+          <input
+            type="checkbox"
+            checked={soundEnabled}
+            onChange={(e) => setSoundEnabled(e.target.checked)}
+          />
+          Dźwięk włączony
+        </label>
+
+        <label className="option-label option-label-column">
+          <span>Tempo mowy: {speechRate.toFixed(2)}</span>
+          <input
+            type="range"
+            className="speech-rate-slider"
+            min="0.5"
+            max="1.2"
+            step="0.05"
+            value={speechRate}
+            onChange={(e) => setSpeechRate(Number(e.target.value))}
+          />
+        </label>
       </div>
 
       {menuSections.map((section) => (

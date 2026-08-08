@@ -19,15 +19,46 @@ function Menu() {
     localStorage.setItem('quizCount', JSON.stringify(quizCount));
   }, [randomize, testMode, quizCount]);
 
-  const baseItems = [
-    { label: 'Liczby 0–10', icon: '🔢', path: '/learn?start=0&stop=10' },
-    { label: 'Liczby 0–20', icon: '🔢', path: '/learn?start=0&stop=20' },
-    { label: 'Litery A–H', icon: '🔤', path: '/learn?start=A&stop=H' },
-    { label: 'Litery I–P', icon: '🔤', path: '/learn?start=I&stop=P' },
-    { label: 'Litery R–Z', icon: '🔤', path: '/learn?start=R&stop=Z' },
-    { label: 'Litery A–Z', icon: '🔤', path: '/learn?start=A&stop=Z' },
-    { label: 'Kolory', icon: '🎨', path: '/colors?a=1' },
-    { label: 'Zwierzęta', icon: '🐾', path: '/image?a=1' },
+  const menuSections = [
+    {
+      title: 'Podstawy',
+      items: [
+        { label: 'Liczby 0–10', icon: '🔢', path: '/learn?start=0&stop=10' },
+        { label: 'Liczby 0–20', icon: '🔢', path: '/learn?start=0&stop=20' },
+        { label: 'Litery A–H', icon: '🔤', path: '/learn?start=A&stop=H' },
+        { label: 'Litery I–P', icon: '🔤', path: '/learn?start=I&stop=P' },
+        { label: 'Litery R–Z', icon: '🔤', path: '/learn?start=R&stop=Z' },
+        { label: 'Litery A–Z', icon: '🔤', path: '/learn?start=A&stop=Z' },
+        { label: 'Kolory', icon: '🎨', path: '/colors?a=1' },
+      ],
+    },
+    {
+      title: 'Zwierzęta i natura',
+      items: [
+        { label: 'Zwierzęta', icon: '🐾', path: '/image?a=1' },
+        { label: 'Owoce', icon: '🍎', path: '/fruits?a=1' },
+      ],
+    },
+    {
+      title: 'Kształty i liczenie',
+      items: [
+        { label: 'Kształty', icon: '🔷', path: '/shapes?a=1' },
+        { label: 'Liczenie', icon: '🔢', path: '/counting?a=1' },
+      ],
+    },
+    {
+      title: 'Pojazdy',
+      items: [
+        { label: 'Pojazdy', icon: '🚗', path: '/vehicles?a=1' },
+        { label: 'Marki aut', icon: '🏎️', path: '/car-brands?a=1' },
+      ],
+    },
+    {
+      title: 'Emocje',
+      items: [
+        { label: 'Emocje', icon: '😊', path: '/emotions?a=1' },
+      ],
+    },
   ];
 
   const getPath = (basePath) => {
@@ -78,15 +109,20 @@ function Menu() {
         )}
       </div>
 
-      {baseItems.map((item, index) => (
-        <Link
-          key={index}
-          to={getPath(item.path)}
-          className="menu-item"
-        >
-          <span className="menu-icon">{item.icon}</span>
-          {item.label}
-        </Link>
+      {menuSections.map((section) => (
+        <div key={section.title} className="menu-section">
+          <h2 className="menu-section-title">{section.title}</h2>
+          {section.items.map((item, index) => (
+            <Link
+              key={index}
+              to={getPath(item.path)}
+              className="menu-item"
+            >
+              <span className="menu-icon">{item.icon}</span>
+              {item.label}
+            </Link>
+          ))}
+        </div>
       ))}
     </div>
   );

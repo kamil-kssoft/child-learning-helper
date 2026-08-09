@@ -9,14 +9,21 @@ import {
 import { registerRoute } from 'workbox-routing';
 import { CacheFirst, StaleWhileRevalidate } from 'workbox-strategies';
 import { animalFilenames } from './config/content';
+import { imageRevisions } from './config/imageRevisions';
 
 clientsClaim();
+
+self.addEventListener('message', (event) => {
+  if (event.data?.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
 
 const ANIMAL_IMAGES = animalFilenames.map((file) => `/img/${file}`);
 
 precacheAndRoute(
   self.__WB_MANIFEST.concat(
-    ANIMAL_IMAGES.map((url) => ({ url, revision: null }))
+    ANIMAL_IMAGES.map((url) => ({ url, revision: imageRevisions[url] }))
   )
 );
 

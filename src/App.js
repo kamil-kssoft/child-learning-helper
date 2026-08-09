@@ -8,11 +8,13 @@ import Fruits from './components/Fruits';
 import Vehicles from './components/Vehicles';
 import Emotions from './components/Emotions';
 import Counting from './components/Counting';
+import PwaUpdateBanner from './components/PwaUpdateBanner';
 import './App.css';
 
 function App() {
   return (
     <Router>
+      <PwaUpdateBanner />
       <Routes>
         <Route path="/menu" element={<Menu />} />
         <Route path="/colors" element={<Colors />} />

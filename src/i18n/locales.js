@@ -1,17 +1,25 @@
 const DEFAULT_LOCALE = 'pl';
 
-const SUPPORTED_LOCALES = ['pl', 'en'];
+const SUPPORTED_LOCALES = ['pl', 'en', 'it'];
 
 const LOCALE_META = {
   pl: {
     label: 'Polski',
     htmlLang: 'pl',
     speechLang: 'pl-PL',
+    flag: '🇵🇱',
   },
   en: {
     label: 'English',
     htmlLang: 'en',
     speechLang: 'en-US',
+    flag: '🇬🇧',
+  },
+  it: {
+    label: 'Italiano',
+    htmlLang: 'it',
+    speechLang: 'it-IT',
+    flag: '🇮🇹',
   },
 };
 

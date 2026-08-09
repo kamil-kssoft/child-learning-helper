@@ -7,18 +7,23 @@ function LanguageSwitcher() {
   return (
     <div className="language-switcher" role="group" aria-label={t('menu.language')}>
       <span className="language-switcher-label">{t('menu.language')}</span>
-      <div className="language-switcher-buttons">
+      <div className="language-switcher-flags">
         {supportedLocales.map((code) => {
           const selected = code === locale;
+          const meta = localeMeta[code];
           return (
             <button
               key={code}
               type="button"
-              className={`language-switcher-button${selected ? ' is-selected' : ''}`}
+              className={`language-switcher-flag${selected ? ' is-selected' : ''}`}
+              aria-label={meta?.label || code}
               aria-pressed={selected}
+              title={meta?.label || code}
               onClick={() => setLocale(code)}
             >
-              {localeMeta[code]?.label || code}
+              <span className="language-switcher-flag-emoji" aria-hidden="true">
+                {meta?.flag || code}
+              </span>
             </button>
           );
         })}

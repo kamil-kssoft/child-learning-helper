@@ -69,6 +69,9 @@ const en = {
   'base.empty': 'No items to learn.',
   'base.quizTooFew': 'Not enough items for a quiz. Turn off quiz mode in the menu.',
 
+  'progress.session': '{current} / {total}',
+  'progress.category': '{completed} of {total} completed',
+
   'sound.title': '🔊 Sound settings',
   'sound.enabled': 'Sound enabled',
   'sound.rate': 'Speech rate: {rate}',

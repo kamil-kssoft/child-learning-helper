@@ -55,6 +55,46 @@ function pickPolishVoice(voices) {
 }
 
 /**
+ * Call from a click/tap handler so Brave/Chrome grant autoplay for speech + Web Audio.
+ * Does not require microphone permission — only a user gesture (and site sound allowed).
+ */
+function unlockAudioPlayback() {
+  const speechSynthesis = getSpeechSynthesis();
+  if (speechSynthesis && typeof SpeechSynthesisUtterance !== 'undefined') {
+    try {
+      speechSynthesis.cancel();
+      if (speechSynthesis.paused) {
+        speechSynthesis.resume();
+      }
+      // Silent utterance during a tap unlocks autoplay for later speak() calls
+      // (needed in Brave/Chrome; no microphone permission is involved).
+      const warmup = new SpeechSynthesisUtterance(' ');
+      warmup.volume = 0;
+      warmup.rate = 2;
+      speechSynthesis.speak(warmup);
+    } catch {
+      // ignore unlock failures
+    }
+  }
+
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (AudioCtx) {
+      const ctx = new AudioCtx();
+      if (ctx.state === 'suspended') {
+        ctx.resume();
+      }
+      // Close immediately — useAudio creates its own context later.
+      if (typeof ctx.close === 'function') {
+        ctx.close();
+      }
+    }
+  } catch {
+    // ignore unlock failures
+  }
+}
+
+/**
  * Speak text via the Web Speech API.
  * Always settles, even on older phones where speak() can hang without onend/onerror.
  */
@@ -142,6 +182,7 @@ export {
   LEARN_SILENCE_MS,
   SPEAK_TIMEOUT_MS,
   VOICES_WAIT_MS,
+  unlockAudioPlayback,
   speakText,
   waitForVoices,
   pickPolishVoice,

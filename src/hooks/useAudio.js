@@ -1,6 +1,6 @@
 import { useCallback, useRef } from 'react';
 import { getSoundEnabled, getSpeechRate } from '../utils/audioSettings';
-import { speakText } from '../utils/speech';
+import { speakText, unlockAudioPlayback } from '../utils/speech';
 
 function playTone(audioContext, frequency, startTime, duration, type = 'sine', volume = 0.3) {
   const oscillator = audioContext.createOscillator();
@@ -64,5 +64,11 @@ export function useAudio() {
     }
   }, [getAudioContext]);
 
-  return { speak, playSuccess, playWrong, soundEnabled: getSoundEnabled() };
+  return {
+    speak,
+    playSuccess,
+    playWrong,
+    unlockAudio: unlockAudioPlayback,
+    soundEnabled: getSoundEnabled(),
+  };
 }

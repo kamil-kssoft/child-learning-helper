@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { DEFAULT_SPEECH_RATE } from '../utils/audioSettings';
+import { unlockAudioPlayback } from '../utils/speech';
 import PwaInstallBanner from './PwaInstallBanner';
 import './Menu.css';
 
@@ -121,24 +122,36 @@ function Menu() {
           <input
             type="checkbox"
             checked={soundEnabled}
-            onChange={(e) => setSoundEnabled(e.target.checked)}
+            onChange={(e) => {
+              const enabled = e.target.checked;
+              setSoundEnabled(enabled);
+              if (enabled) {
+                unlockAudioPlayback();
+              }
+            }}
           />
           Dźwięk włączony
         </label>
 
         {soundEnabled && (
-          <label className="option-label option-label-column">
-            <span>Tempo mowy: {speechRate.toFixed(2)}</span>
-            <input
-              type="range"
-              className="speech-rate-slider"
-              min="0.5"
-              max="1.2"
-              step="0.05"
-              value={speechRate}
-              onChange={(e) => setSpeechRate(Number(e.target.value))}
-            />
-          </label>
+          <>
+            <label className="option-label option-label-column">
+              <span>Tempo mowy: {speechRate.toFixed(2)}</span>
+              <input
+                type="range"
+                className="speech-rate-slider"
+                min="0.5"
+                max="1.2"
+                step="0.05"
+                value={speechRate}
+                onChange={(e) => setSpeechRate(Number(e.target.value))}
+              />
+            </label>
+            <p className="sound-help">
+              W Brave: zezwól tej stronie na dźwięk/autoplay (ikona tarczy → ustawienia witryny).
+              Nie trzeba włączać mikrofonu.
+            </p>
+          </>
         )}
       </div>
 
@@ -150,6 +163,11 @@ function Menu() {
               key={index}
               to={getPath(item.path)}
               className="menu-item"
+              onClick={() => {
+                if (soundEnabled) {
+                  unlockAudioPlayback();
+                }
+              }}
             >
               <span className="menu-icon">{item.icon}</span>
               {item.label}

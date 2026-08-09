@@ -1,4 +1,4 @@
-import { speakText, SPEAK_TIMEOUT_MS } from './speech';
+import { speakText, SPEAK_TIMEOUT_MS, unlockAudioPlayback } from './speech';
 
 function createSpeechSynthesisMock({ hang = false, voices = [] } = {}) {
   const listeners = {};
@@ -92,6 +92,18 @@ describe('speakText', () => {
     window.speechSynthesis = createSpeechSynthesisMock({ hang: true });
     await expect(speakText('pies', { enabled: false })).resolves.toBeUndefined();
     expect(window.speechSynthesis.speak).not.toHaveBeenCalled();
+  });
+
+  test('unlockAudioPlayback speaks a silent utterance on user gesture (Brave/Chrome)', () => {
+    window.speechSynthesis = createSpeechSynthesisMock({
+      voices: [{ lang: 'pl-PL', name: 'Polish' }],
+    });
+
+    unlockAudioPlayback();
+
+    expect(window.speechSynthesis.speak).toHaveBeenCalled();
+    const utterance = window.speechSynthesis.speak.mock.calls[0][0];
+    expect(utterance.volume).toBe(0);
   });
 
   test('resumes paused synthesis after cancel (Chrome/Android quirk)', async () => {

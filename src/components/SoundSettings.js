@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import BackButton from './BackButton';
 import SoundPermissionMessage from './SoundPermissionMessage';
+import LanguageSwitcher from './LanguageSwitcher';
 import { useAudio } from '../hooks/useAudio';
+import { useT } from '../i18n/LocaleContext';
 import {
-  DEFAULT_SPEECH_RATE,
   getSoundEnabled,
   setSoundEnabled,
   getSpeechRate,
@@ -12,9 +13,8 @@ import {
 } from '../utils/audioSettings';
 import './SoundSettings.css';
 
-const TEST_PHRASE = 'To jest test dźwięku. Wszystko działa poprawnie.';
-
 function SoundSettings() {
+  const t = useT();
   const [soundEnabled, setSoundEnabledLocal] = useState(() => getSoundEnabled());
   const [speechRate, setSpeechRateLocal] = useState(() => getSpeechRate());
   const [isTesting, setIsTesting] = useState(false);
@@ -49,7 +49,7 @@ function SoundSettings() {
       return;
     }
 
-    await speak(TEST_PHRASE);
+    await speak(t('sound.testPhrase'));
     playSuccess();
     setIsTesting(false);
   };
@@ -57,21 +57,23 @@ function SoundSettings() {
   return (
     <div className="sound-settings-container">
       <BackButton />
-      <h1 className="sound-settings-title">🔊 Ustawienia dźwięku</h1>
+      <h1 className="sound-settings-title">{t('sound.title')}</h1>
 
       <div className="sound-settings-panel">
+        <LanguageSwitcher />
+
         <label className="sound-settings-label">
           <input
             type="checkbox"
             checked={soundEnabled}
             onChange={(e) => handleSoundToggle(e.target.checked)}
           />
-          Dźwięk włączony
+          {t('sound.enabled')}
         </label>
 
         {soundEnabled && (
           <label className="sound-settings-label sound-settings-label-column">
-            <span>Tempo mowy: {speechRate.toFixed(2)}</span>
+            <span>{t('sound.rate', { rate: speechRate.toFixed(2) })}</span>
             <input
               type="range"
               className="speech-rate-slider"
@@ -91,7 +93,7 @@ function SoundSettings() {
             onClick={handleTest}
             disabled={isTesting}
           >
-            {isTesting ? 'Odtwarzanie…' : 'Testuj dźwięk'}
+            {isTesting ? t('sound.testing') : t('sound.test')}
           </button>
         )}
 
@@ -103,9 +105,7 @@ function SoundSettings() {
         )}
 
         {!soundEnabled && (
-          <p className="sound-settings-hint">
-            Włącz dźwięk, aby usłyszeć nazwy podczas nauki i quizów.
-          </p>
+          <p className="sound-settings-hint">{t('sound.hint')}</p>
         )}
       </div>
     </div>

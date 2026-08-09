@@ -1,11 +1,13 @@
 import CategoryView from './CategoryView';
 import { professionItems } from '../config/content';
+import { useT } from '../i18n/LocaleContext';
 
 function Professions() {
+  const t = useT();
   return (
     <CategoryView
       items={professionItems}
-      categoryLabel="zawód"
+      categoryLabel={t('category.profession')}
       renderContent={(emoji) => ({
         content: emoji,
       })}

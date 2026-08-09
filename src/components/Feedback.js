@@ -1,6 +1,8 @@
+import { useT } from '../i18n/LocaleContext';
 import './Feedback.css';
 
 function Feedback({ type }) {
+  const t = useT();
   if (!type) return null;
 
   if (type === 'success') {
@@ -8,7 +10,7 @@ function Feedback({ type }) {
       <div className="feedback-overlay feedback-success" aria-live="polite">
         <div className="feedback-content">
           <span className="feedback-emoji">⭐</span>
-          <span className="feedback-text">Brawo!</span>
+          <span className="feedback-text">{t('feedback.success')}</span>
         </div>
         <div className="confetti-container">
           {Array.from({ length: 20 }, (_, i) => (
@@ -24,7 +26,7 @@ function Feedback({ type }) {
       <div className="feedback-overlay feedback-wrong" aria-live="polite">
         <div className="feedback-content">
           <span className="feedback-emoji">🤔</span>
-          <span className="feedback-text">Spróbuj jeszcze raz!</span>
+          <span className="feedback-text">{t('feedback.wrong')}</span>
         </div>
       </div>
     );

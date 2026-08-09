@@ -1,4 +1,4 @@
-import { speakText, SPEAK_TIMEOUT_MS, unlockAudioPlayback } from './speech';
+import { speakText, SPEAK_TIMEOUT_MS, unlockAudioPlayback, pickVoiceForLang } from './speech';
 import { ISSUE_BLOCKED, ISSUE_UNSUPPORTED } from './audioPermissions';
 
 function createSpeechSynthesisMock({ hang = false, voices = [], error = null } = {}) {
@@ -173,5 +173,35 @@ describe('speakText', () => {
     await expect(promise).resolves.toEqual({ ok: true, issue: null });
     expect(synth.cancel).toHaveBeenCalled();
     expect(synth.resume).toHaveBeenCalled();
+  });
+
+  test('uses requested speech lang and matching voice', async () => {
+    const englishVoice = { lang: 'en-US', name: 'English' };
+    window.speechSynthesis = createSpeechSynthesisMock({
+      hang: false,
+      voices: [{ lang: 'pl-PL', name: 'Polish' }, englishVoice],
+    });
+
+    const promise = speakText('cat', { timeoutMs: SPEAK_TIMEOUT_MS, lang: 'en-US' });
+    await Promise.resolve();
+    jest.advanceTimersByTime(0);
+
+    await expect(promise).resolves.toEqual({ ok: true, issue: null });
+    const utterance = window.speechSynthesis.speak.mock.calls[0][0];
+    expect(utterance.lang).toBe('en-US');
+    expect(utterance.voice).toBe(englishVoice);
+  });
+});
+
+describe('pickVoiceForLang', () => {
+  test('prefers exact lang then prefix match', () => {
+    const voices = [
+      { lang: 'en-GB', name: 'British' },
+      { lang: 'en-US', name: 'American' },
+      { lang: 'pl-PL', name: 'Polish' },
+    ];
+    expect(pickVoiceForLang(voices, 'en-US').name).toBe('American');
+    expect(pickVoiceForLang(voices, 'en-AU').name).toBe('British');
+    expect(pickVoiceForLang(voices, 'pl-PL').name).toBe('Polish');
   });
 });

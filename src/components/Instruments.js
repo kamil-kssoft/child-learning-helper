@@ -1,11 +1,13 @@
 import CategoryView from './CategoryView';
 import { instrumentItems } from '../config/content';
+import { useT } from '../i18n/LocaleContext';
 
 function Instruments() {
+  const t = useT();
   return (
     <CategoryView
       items={instrumentItems}
-      categoryLabel="instrument"
+      categoryLabel={t('category.instrument')}
       renderContent={(emoji) => ({
         content: emoji,
       })}

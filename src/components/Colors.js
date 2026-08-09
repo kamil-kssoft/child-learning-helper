@@ -1,16 +1,21 @@
 import { BaseItem } from './BaseItem';
-import { colorItems } from '../config/content';
+import { colorItems, getItemLabel } from '../config/content';
+import { useLocale, useT } from '../i18n/LocaleContext';
 
 function Colors() {
+  const { locale } = useLocale();
+  const t = useT();
   const values = colorItems.map((c) => c.value);
-  const getItemLabel = (hex) =>
-    colorItems.find((c) => c.value === hex)?.label || hex;
+  const resolveLabel = (hex) => {
+    const item = colorItems.find((c) => c.value === hex);
+    return item ? getItemLabel(item, locale) : hex;
+  };
 
   return (
     <BaseItem
       values={values}
-      getItemLabel={getItemLabel}
-      categoryLabel="kolor"
+      getItemLabel={resolveLabel}
+      categoryLabel={t('category.color')}
       renderContent={(item) => ({
         style: {
           backgroundColor: item,

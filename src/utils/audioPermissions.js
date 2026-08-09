@@ -1,19 +1,27 @@
+import { translate } from '../i18n/translate';
+import { DEFAULT_LOCALE } from '../i18n/locales';
+
 const ISSUE_UNSUPPORTED = 'unsupported';
 const ISSUE_BLOCKED = 'blocked';
 const ISSUE_NO_AUDIO = 'no-audio';
 
-const MESSAGES = {
-  [ISSUE_UNSUPPORTED]:
-    'Ta przeglądarka nie obsługuje mowy. Dźwięk nie będzie działał.',
-  [ISSUE_BLOCKED]:
-    'Przeglądarka blokuje dźwięk. Zezwól tej stronie na dźwięk i autoplay (w Brave: ikona tarczy → ustawienia witryny). Mikrofon nie jest potrzebny.',
-  [ISSUE_NO_AUDIO]:
-    'Brak dostępu do dźwięku na tym urządzeniu. Sprawdź ustawienia dźwięku przeglądarki i systemu.',
+const ISSUE_TO_UI_KEY = {
+  [ISSUE_UNSUPPORTED]: 'permission.unsupported',
+  [ISSUE_BLOCKED]: 'permission.blocked',
+  [ISSUE_NO_AUDIO]: 'permission.noAudio',
 };
 
-function messageForIssue(issue) {
+/** @deprecated Prefer messageForIssue(issue, locale) */
+const MESSAGES = {
+  [ISSUE_UNSUPPORTED]: translate(DEFAULT_LOCALE, 'permission.unsupported'),
+  [ISSUE_BLOCKED]: translate(DEFAULT_LOCALE, 'permission.blocked'),
+  [ISSUE_NO_AUDIO]: translate(DEFAULT_LOCALE, 'permission.noAudio'),
+};
+
+function messageForIssue(issue, locale = DEFAULT_LOCALE) {
   if (!issue) return '';
-  return MESSAGES[issue] || MESSAGES[ISSUE_BLOCKED];
+  const key = ISSUE_TO_UI_KEY[issue] || ISSUE_TO_UI_KEY[ISSUE_BLOCKED];
+  return translate(locale, key);
 }
 
 function issueFromSpeechError(errorCode) {

@@ -113,6 +113,105 @@ const emotionItems = [
   { value: '🤩', labels: { pl: 'zachwycony', en: 'amazed' } },
 ];
 
+const vegetableItems = [
+  { value: '🥕', labels: { pl: 'marchewka', en: 'carrot' } },
+  { value: '🍅', labels: { pl: 'pomidor', en: 'tomato' } },
+  { value: '🥒', labels: { pl: 'ogórek', en: 'cucumber' } },
+  { value: '🥦', labels: { pl: 'brokuł', en: 'broccoli' } },
+  { value: '🥔', labels: { pl: 'ziemniak', en: 'potato' } },
+  { value: '🌽', labels: { pl: 'kukurydza', en: 'corn' } },
+  { value: '🫑', labels: { pl: 'papryka', en: 'pepper' } },
+  { value: '🧅', labels: { pl: 'cebula', en: 'onion' } },
+];
+
+const weatherItems = [
+  { value: '☀️', labels: { pl: 'słońce', en: 'sun' } },
+  { value: '🌧️', labels: { pl: 'deszcz', en: 'rain' } },
+  { value: '❄️', labels: { pl: 'śnieg', en: 'snow' } },
+  { value: '☁️', labels: { pl: 'chmura', en: 'cloud' } },
+  { value: '🌈', labels: { pl: 'tęcza', en: 'rainbow' } },
+  { value: '⛈️', labels: { pl: 'burza', en: 'storm' } },
+  { value: '💨', labels: { pl: 'wiatr', en: 'wind' } },
+  { value: '🌤️', labels: { pl: 'pogodnie', en: 'partly sunny' } },
+];
+
+const bodyPartItems = [
+  { value: '👀', labels: { pl: 'oczy', en: 'eyes' } },
+  { value: '👃', labels: { pl: 'nos', en: 'nose' } },
+  { value: '👂', labels: { pl: 'ucho', en: 'ear' } },
+  { value: '👄', labels: { pl: 'usta', en: 'mouth' } },
+  { value: '✋', labels: { pl: 'ręka', en: 'hand' } },
+  { value: '🦵', labels: { pl: 'noga', en: 'leg' } },
+  { value: '🦶', labels: { pl: 'stopa', en: 'foot' } },
+  { value: '🧠', labels: { pl: 'głowa', en: 'head' } },
+];
+
+const clothesItems = [
+  { value: '👕', labels: { pl: 'koszulka', en: 't-shirt' } },
+  { value: '👖', labels: { pl: 'spodnie', en: 'pants' } },
+  { value: '🧥', labels: { pl: 'kurtka', en: 'jacket' } },
+  { value: '👗', labels: { pl: 'sukienka', en: 'dress' } },
+  { value: '🧦', labels: { pl: 'skarpetki', en: 'socks' } },
+  { value: '👟', labels: { pl: 'buty', en: 'shoes' } },
+  { value: '🧢', labels: { pl: 'czapka', en: 'cap' } },
+  { value: '🧤', labels: { pl: 'rękawiczki', en: 'gloves' } },
+];
+
+const professionItems = [
+  { value: '👨‍⚕️', labels: { pl: 'lekarz', en: 'doctor' } },
+  { value: '👨‍🚒', labels: { pl: 'strażak', en: 'firefighter' } },
+  { value: '👮', labels: { pl: 'policjant', en: 'police officer' } },
+  { value: '👩‍🏫', labels: { pl: 'nauczyciel', en: 'teacher' } },
+  { value: '👨‍🍳', labels: { pl: 'kucharz', en: 'chef' } },
+  { value: '👷', labels: { pl: 'budowlaniec', en: 'builder' } },
+  { value: '👩‍🌾', labels: { pl: 'rolnik', en: 'farmer' } },
+  { value: '👨‍✈️', labels: { pl: 'pilot', en: 'pilot' } },
+];
+
+const homeItems = [
+  { value: '🛏️', labels: { pl: 'łóżko', en: 'bed' } },
+  { value: '🪑', labels: { pl: 'krzesło', en: 'chair' } },
+  { value: '🚪', labels: { pl: 'drzwi', en: 'door' } },
+  { value: '🪟', labels: { pl: 'okno', en: 'window' } },
+  { value: '💡', labels: { pl: 'lampa', en: 'lamp' } },
+  { value: '🍽️', labels: { pl: 'talerz', en: 'plate' } },
+  { value: '🚿', labels: { pl: 'prysznic', en: 'shower' } },
+  { value: '🛁', labels: { pl: 'wanna', en: 'bathtub' } },
+];
+
+const spaceItems = [
+  { value: '🚀', labels: { pl: 'rakieta', en: 'rocket' } },
+  { value: '🌙', labels: { pl: 'księżyc', en: 'moon' } },
+  { value: '⭐', labels: { pl: 'gwiazda', en: 'star' } },
+  { value: '🪐', labels: { pl: 'planeta', en: 'planet' } },
+  { value: '🌍', labels: { pl: 'ziemia', en: 'earth' } },
+  { value: '👨‍🚀', labels: { pl: 'astronauta', en: 'astronaut' } },
+  { value: '🛸', labels: { pl: 'statek kosmiczny', en: 'spaceship' } },
+  { value: '☄️', labels: { pl: 'kometa', en: 'comet' } },
+];
+
+const sportItems = [
+  { value: '⚽', labels: { pl: 'piłka nożna', en: 'soccer' } },
+  { value: '🏀', labels: { pl: 'koszykówka', en: 'basketball' } },
+  { value: '🏊', labels: { pl: 'pływanie', en: 'swimming' } },
+  { value: '🏃', labels: { pl: 'bieganie', en: 'running' } },
+  { value: '🎾', labels: { pl: 'tenis', en: 'tennis' } },
+  { value: '⛸️', labels: { pl: 'łyżwy', en: 'ice skating' } },
+  { value: '🤸', labels: { pl: 'gimnastyka', en: 'gymnastics' } },
+  { value: '🏂', labels: { pl: 'snowboard', en: 'snowboarding' } },
+];
+
+const instrumentItems = [
+  { value: '🎸', labels: { pl: 'gitara', en: 'guitar' } },
+  { value: '🥁', labels: { pl: 'bęben', en: 'drum' } },
+  { value: '🎹', labels: { pl: 'pianino', en: 'piano' } },
+  { value: '🎻', labels: { pl: 'skrzypce', en: 'violin' } },
+  { value: '🪈', labels: { pl: 'flet', en: 'flute' } },
+  { value: '🎺', labels: { pl: 'trąbka', en: 'trumpet' } },
+  { value: '🪗', labels: { pl: 'akordeon', en: 'accordion' } },
+  { value: '🎷', labels: { pl: 'saksofon', en: 'saxophone' } },
+];
+
 const countingItems = [
   { value: 'count-1-star', labels: { pl: 'jeden', en: 'one' }, count: 1, emoji: '⭐' },
   { value: 'count-2-apple', labels: { pl: 'dwa', en: 'two' }, count: 2, emoji: '🍎' },
@@ -216,6 +315,15 @@ export {
   fruitItems,
   vehicleItems,
   emotionItems,
+  vegetableItems,
+  weatherItems,
+  bodyPartItems,
+  clothesItems,
+  professionItems,
+  homeItems,
+  spaceItems,
+  sportItems,
+  instrumentItems,
   countingItems,
   numberLabels,
   letterLabels,

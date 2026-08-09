@@ -39,6 +39,8 @@ function Menu() {
         items: [
           { labelKey: 'menu.item.animals', icon: '🐾', path: '/image?a=1' },
           { labelKey: 'menu.item.fruits', icon: '🍎', path: '/fruits?a=1' },
+          { labelKey: 'menu.item.vegetables', icon: '🥕', path: '/vegetables?a=1' },
+          { labelKey: 'menu.item.weather', icon: '☀️', path: '/weather?a=1' },
         ],
       },
       {
@@ -59,6 +61,23 @@ function Menu() {
         titleKey: 'menu.section.emotions',
         items: [
           { labelKey: 'menu.item.emotions', icon: '😊', path: '/emotions?a=1' },
+        ],
+      },
+      {
+        titleKey: 'menu.section.dailyLife',
+        items: [
+          { labelKey: 'menu.item.bodyParts', icon: '👀', path: '/body-parts?a=1' },
+          { labelKey: 'menu.item.clothes', icon: '👕', path: '/clothes?a=1' },
+          { labelKey: 'menu.item.home', icon: '🏠', path: '/home?a=1' },
+          { labelKey: 'menu.item.professions', icon: '👨‍⚕️', path: '/professions?a=1' },
+        ],
+      },
+      {
+        titleKey: 'menu.section.worldPlay',
+        items: [
+          { labelKey: 'menu.item.space', icon: '🚀', path: '/space?a=1' },
+          { labelKey: 'menu.item.sports', icon: '⚽', path: '/sports?a=1' },
+          { labelKey: 'menu.item.instruments', icon: '🎸', path: '/instruments?a=1' },
         ],
       },
     ],

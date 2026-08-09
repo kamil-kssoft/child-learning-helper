@@ -9,6 +9,7 @@ import Vehicles from './components/Vehicles';
 import CarBrands from './components/CarBrands';
 import Emotions from './components/Emotions';
 import Counting from './components/Counting';
+import SoundSettings from './components/SoundSettings';
 import PwaUpdateBanner from './components/PwaUpdateBanner';
 import './App.css';
 
@@ -26,6 +27,7 @@ function App() {
         <Route path="/vehicles" element={<Vehicles />} />
         <Route path="/car-brands" element={<CarBrands />} />
         <Route path="/emotions" element={<Emotions />} />
+        <Route path="/sound" element={<SoundSettings />} />
         <Route path="/counting" element={<Counting />} />
         <Route path="*" element={<Navigate to="/menu" />} />
       </Routes>

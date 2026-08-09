@@ -4,6 +4,7 @@ import { useAudio } from '../hooks/useAudio';
 import BackButton from './BackButton';
 import Feedback from './Feedback';
 import SoundPermissionMessage from './SoundPermissionMessage';
+import SoundUnlockBanner from './SoundUnlockBanner';
 import './Feedback.css';
 import './BaseItem.css';
 
@@ -28,11 +29,14 @@ export function BaseItem({ values, style, renderContent, getItemLabel, categoryL
   const [wrongTileIdx, setWrongTileIdx] = useState(null);
   const [isLocked, setIsLocked] = useState(false);
   const [isAdvancing, setIsAdvancing] = useState(false);
+  const [isUnlocking, setIsUnlocking] = useState(false);
 
   const {
     speak,
     playSuccess,
     playWrong,
+    unlockAudio,
+    audioUnlocked,
     soundEnabled,
     permissionIssue,
     clearPermissionIssue,
@@ -69,7 +73,7 @@ export function BaseItem({ values, style, renderContent, getItemLabel, categoryL
   const learnItem = currentItems[0];
 
   useEffect(() => {
-    if (isQuizMode || !learnItem) return;
+    if (isQuizMode || !learnItem || !soundEnabled || !audioUnlocked) return;
 
     let cancelled = false;
     setIsAdvancing(true);
@@ -85,16 +89,16 @@ export function BaseItem({ values, style, renderContent, getItemLabel, categoryL
       window.speechSynthesis?.cancel();
       setIsAdvancing(false);
     };
-  }, [currentSequenceIdx, learnItem, isQuizMode, speak, labelFor]);
+  }, [currentSequenceIdx, learnItem, isQuizMode, soundEnabled, audioUnlocked, speak, labelFor]);
 
   useEffect(() => {
-    if (soundEnabled && isQuizMode && correctItem) {
+    if (soundEnabled && audioUnlocked && isQuizMode && correctItem) {
       const timer = setTimeout(() => {
         speak(buildQuizPrompt(labelFor(correctItem), categoryLabel));
       }, 400);
       return () => clearTimeout(timer);
     }
-  }, [isQuizMode, correctItem, currentSequenceIdx, correctIndex, soundEnabled, speak, labelFor, categoryLabel]);
+  }, [isQuizMode, correctItem, currentSequenceIdx, correctIndex, soundEnabled, audioUnlocked, speak, labelFor, categoryLabel]);
 
   useEffect(() => {
     return () => {
@@ -165,6 +169,14 @@ export function BaseItem({ values, style, renderContent, getItemLabel, categoryL
 
   const handleTileClick = isQuizMode ? handleQuizClick : () => handleLearnClick();
 
+  const handleUnlockAudio = useCallback(async () => {
+    setIsUnlocking(true);
+    await unlockAudio();
+    setIsUnlocking(false);
+  }, [unlockAudio]);
+
+  const needsUnlock = soundEnabled && !audioUnlocked;
+
   if (values.length === 0) {
     return (
       <div className="base-item-container">
@@ -190,7 +202,11 @@ export function BaseItem({ values, style, renderContent, getItemLabel, categoryL
       <BackButton />
       <Feedback type={feedback} />
 
-      {soundEnabled && permissionIssue && (
+      {needsUnlock && (
+        <SoundUnlockBanner onUnlock={handleUnlockAudio} isUnlocking={isUnlocking} />
+      )}
+
+      {soundEnabled && permissionIssue && !needsUnlock && (
         <div className="sound-permission-banner">
           <SoundPermissionMessage
             issue={permissionIssue}

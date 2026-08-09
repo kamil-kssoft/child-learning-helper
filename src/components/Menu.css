@@ -85,3 +85,24 @@
 .menu-icon {
   font-size: 1.6rem;
 }
+
+.menu-settings-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+  padding: 0.9rem 1rem;
+  background-color: #fff;
+  color: #333;
+  text-decoration: none;
+  border-radius: 0.75rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+  border: 2px solid #c5d4f0;
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.menu-settings-link:active {
+  transform: scale(0.98);
+  background-color: #e8eef9;
+}

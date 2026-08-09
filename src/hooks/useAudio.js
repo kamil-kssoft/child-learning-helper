@@ -1,5 +1,10 @@
 import { useCallback, useRef, useState } from 'react';
-import { getSoundEnabled, getSpeechRate } from '../utils/audioSettings';
+import {
+  getSoundEnabled,
+  getSpeechRate,
+  isAudioUnlocked,
+  setAudioUnlocked,
+} from '../utils/audioSettings';
 import { ISSUE_BLOCKED, ISSUE_NO_AUDIO } from '../utils/audioPermissions';
 import { speakText, unlockAudioPlayback } from '../utils/speech';
 
@@ -22,6 +27,7 @@ function playTone(audioContext, frequency, startTime, duration, type = 'sine', v
 export function useAudio() {
   const audioContextRef = useRef(null);
   const [permissionIssue, setPermissionIssue] = useState(null);
+  const [audioUnlocked, setAudioUnlockedState] = useState(() => isAudioUnlocked());
 
   const clearPermissionIssue = useCallback(() => {
     setPermissionIssue(null);
@@ -57,6 +63,8 @@ export function useAudio() {
     if (result?.issue) {
       setPermissionIssue(result.issue);
     } else if (result?.ok) {
+      setAudioUnlocked(true);
+      setAudioUnlockedState(true);
       setPermissionIssue(null);
     }
     return result;
@@ -101,6 +109,7 @@ export function useAudio() {
     playSuccess,
     playWrong,
     unlockAudio,
+    audioUnlocked,
     permissionIssue,
     clearPermissionIssue,
     soundEnabled: getSoundEnabled(),

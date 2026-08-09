@@ -23,9 +23,19 @@ const PRECACHE_IMAGES = [...animalFilenames, ...carBrandFilenames].map(
   (file) => `/img/${file}`
 );
 
+// iOS/Android cold-start offline opens start_url directly; it must exist in precache.
+const SPA_ROUTES = ['/', '/menu'];
+
+const manifest = self.__WB_MANIFEST;
+const indexEntry = manifest.find(
+  (item) => item.url === '/index.html' || item.url.endsWith('/index.html')
+);
+const indexRevision = indexEntry?.revision ?? null;
+
 precacheAndRoute(
-  self.__WB_MANIFEST.concat(
-    PRECACHE_IMAGES.map((url) => ({ url, revision: imageRevisions[url] }))
+  manifest.concat(
+    PRECACHE_IMAGES.map((url) => ({ url, revision: imageRevisions[url] })),
+    SPA_ROUTES.map((url) => ({ url, revision: indexRevision }))
   )
 );
 

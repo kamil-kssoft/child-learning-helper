@@ -33,7 +33,7 @@
       "purpose": "maskable"
     }
   ],
-  "start_url": "/menu",
+  "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",

@@ -7,53 +7,22 @@ function shuffleArray(array) {
   return newArray;
 }
 
-function generateArrayWithSubitems(array, subitemsCount, randomize) {
-  if (subitemsCount === 1 && !randomize)
-    return array.map((item) => [item]);
-
-  if (subitemsCount === 1 && randomize)
-    return shuffleArray(array).map((item) => [item]);
-
-  return shuffleArrayWithSubitems(array, subitemsCount);
+function buildQuizRound(values, target, tilesCount) {
+  const distractors = shuffleArray(values.filter((item) => item !== target)).slice(
+    0,
+    tilesCount - 1
+  );
+  return shuffleArray([target, ...distractors]);
 }
 
-function shuffleArrayWithSubitems(array, subitemsCount) {
-  // shuffle array
-  const intermediate = shuffleArray(array);
-
-  // create 2lvl array
-  const output = intermediate.map((item) => [item]);
-
-  for (let i = 0; i < output.length; i++) {
-    let currentArray = [...array];
-
-    // exclude first value
-    const firstValue = output[i][0];
-    currentArray = currentArray.filter((item) => item !== firstValue);
-
-    // exclude all values from previous subitems
-    if (i > 0) {
-      const previousSubitems = output[i - 1];
-      previousSubitems.forEach((subitem) => {
-        currentArray = currentArray.filter((item) => item !== subitem);
-      });
-    }
-
-    // exclude first value from next subitem
-    if (i < output.length - 1) {
-      const nextSubitem = output[i + 1];
-      currentArray = currentArray.filter((item) => !nextSubitem.includes(item));
-    }
-
-    // add subitems
-    for (let j = 0; j < subitemsCount - 1; j++) {
-      const nextValue = currentArray[Math.floor(Math.random() * currentArray.length)];
-      currentArray = currentArray.filter((item) => item !== nextValue);
-      output[i].push(nextValue);
-    }
+function generateArrayWithSubitems(array, subitemsCount, randomize) {
+  if (subitemsCount === 1) {
+    const sequence = randomize ? shuffleArray(array) : [...array];
+    return sequence.map((item) => [item]);
   }
 
-  return output;
+  const sequence = randomize ? shuffleArray(array) : [...array];
+  return sequence.map((target) => buildQuizRound(array, target, subitemsCount));
 }
 
-export { shuffleArray, generateArrayWithSubitems, shuffleArrayWithSubitems };
+export { shuffleArray, generateArrayWithSubitems, buildQuizRound };

@@ -110,9 +110,12 @@ const countingItems = [
   { value: 'count-10-apple', label: 'dziesięć', count: 10, emoji: '🍏' },
 ];
 
+const animalFilenames = animalItems.map((animal) => animal.value);
+
 export {
   colorItems,
   animalItems,
+  animalFilenames,
   shapeItems,
   fruitItems,
   vehicleItems,

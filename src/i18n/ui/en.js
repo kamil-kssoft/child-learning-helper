@@ -45,11 +45,6 @@ const en = {
   'feedback.wrong': 'Try again!',
   'feedback.wrongSpeech': 'Try again',
 
-  'quiz.find': 'Find: {label}',
-  'quiz.findWithCategory': 'Find the {category}: {label}',
-  'quiz.findPrefix': 'Find: ',
-  'quiz.findWithCategoryPrefix': 'Find the {category}: ',
-
   'category.number': 'number',
   'category.letter': 'letter',
   'category.color': 'color',

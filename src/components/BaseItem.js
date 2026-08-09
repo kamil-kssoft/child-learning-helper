@@ -49,15 +49,7 @@ export function BaseItem({ values, style, renderContent, getItemLabel, categoryL
     [getItemLabel]
   );
 
-  const quizPromptSpeech = useCallback(
-    (label) => {
-      if (categoryLabel) {
-        return t('quiz.findWithCategory', { category: categoryLabel, label });
-      }
-      return t('quiz.find', { label });
-    },
-    [categoryLabel, t]
-  );
+  const quizPromptSpeech = useCallback((label) => label, []);
 
   const generateValues = useCallback(() => {
     if (values.length < 2 && requestedTilesCount > 1) return;
@@ -270,9 +262,6 @@ export function BaseItem({ values, style, renderContent, getItemLabel, categoryL
 
       {isQuizMode && correctLabel && (
         <div className={`quiz-prompt${soundEnabled && permissionIssue ? ' quiz-prompt-below-alert' : ''}`}>
-          {categoryLabel
-            ? t('quiz.findWithCategoryPrefix', { category: categoryLabel })
-            : t('quiz.findPrefix')}
           <strong>{correctLabel}</strong>
         </div>
       )}

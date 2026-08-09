@@ -45,11 +45,6 @@ const it = {
   'feedback.wrong': 'Riprova!',
   'feedback.wrongSpeech': 'Riprova',
 
-  'quiz.find': 'Trova: {label}',
-  'quiz.findWithCategory': 'Trova {category}: {label}',
-  'quiz.findPrefix': 'Trova: ',
-  'quiz.findWithCategoryPrefix': 'Trova {category}: ',
-
   'category.number': 'numero',
   'category.letter': 'lettera',
   'category.color': 'colore',

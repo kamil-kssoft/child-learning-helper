@@ -36,6 +36,7 @@ const en = {
   'menu.item.space': 'Space',
   'menu.item.sports': 'Sports',
   'menu.item.instruments': 'Instruments',
+  'menu.item.flags': 'Flags',
 
   'back.menu': '← Menu',
   'back.aria': 'Back to menu',
@@ -68,6 +69,7 @@ const en = {
   'category.spaceObject': 'space object',
   'category.sport': 'sport',
   'category.instrument': 'instrument',
+  'category.flag': 'flag',
 
   'base.empty': 'No items to learn.',
   'base.quizTooFew': 'Not enough items for a quiz. Turn off quiz mode in the menu.',

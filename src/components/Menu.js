@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { DEFAULT_SPEECH_RATE } from '../utils/audioSettings';
+import { unlockAudioPlayback } from '../utils/speech';
 import PwaInstallBanner from './PwaInstallBanner';
+import SoundPermissionMessage from './SoundPermissionMessage';
 import './Menu.css';
 
 function Menu() {
@@ -20,6 +22,7 @@ function Menu() {
   const [speechRate, setSpeechRate] = useState(() =>
     JSON.parse(localStorage.getItem('speechRate') ?? String(DEFAULT_SPEECH_RATE))
   );
+  const [permissionIssue, setPermissionIssue] = useState(null);
 
   useEffect(() => {
     localStorage.setItem('randomize', JSON.stringify(randomize));
@@ -28,6 +31,18 @@ function Menu() {
     localStorage.setItem('soundEnabled', JSON.stringify(soundEnabled));
     localStorage.setItem('speechRate', JSON.stringify(speechRate));
   }, [randomize, testMode, quizCount, soundEnabled, speechRate]);
+
+  useEffect(() => {
+    if (!soundEnabled) {
+      setPermissionIssue(null);
+    }
+  }, [soundEnabled]);
+
+  const checkSoundPermission = async () => {
+    const result = await unlockAudioPlayback();
+    setPermissionIssue(result?.issue || null);
+    return result;
+  };
 
   const menuSections = [
     {
@@ -121,7 +136,15 @@ function Menu() {
           <input
             type="checkbox"
             checked={soundEnabled}
-            onChange={(e) => setSoundEnabled(e.target.checked)}
+            onChange={async (e) => {
+              const enabled = e.target.checked;
+              setSoundEnabled(enabled);
+              if (enabled) {
+                await checkSoundPermission();
+              } else {
+                setPermissionIssue(null);
+              }
+            }}
           />
           Dźwięk włączony
         </label>
@@ -140,6 +163,13 @@ function Menu() {
             />
           </label>
         )}
+
+        {soundEnabled && (
+          <SoundPermissionMessage
+            issue={permissionIssue}
+            onDismiss={() => setPermissionIssue(null)}
+          />
+        )}
       </div>
 
       {menuSections.map((section) => (
@@ -150,6 +180,11 @@ function Menu() {
               key={index}
               to={getPath(item.path)}
               className="menu-item"
+              onClick={() => {
+                if (soundEnabled) {
+                  checkSoundPermission();
+                }
+              }}
             >
               <span className="menu-icon">{item.icon}</span>
               {item.label}

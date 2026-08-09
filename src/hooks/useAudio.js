@@ -1,7 +1,7 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { getSoundEnabled, getSpeechRate } from '../utils/audioSettings';
-
-const LEARN_SILENCE_MS = 700;
+import { ISSUE_BLOCKED, ISSUE_NO_AUDIO } from '../utils/audioPermissions';
+import { speakText, unlockAudioPlayback } from '../utils/speech';
 
 function playTone(audioContext, frequency, startTime, duration, type = 'sine', volume = 0.3) {
   const oscillator = audioContext.createOscillator();
@@ -19,14 +19,13 @@ function playTone(audioContext, frequency, startTime, duration, type = 'sine', v
   oscillator.stop(startTime + duration);
 }
 
-function delay(ms) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
-}
-
 export function useAudio() {
   const audioContextRef = useRef(null);
+  const [permissionIssue, setPermissionIssue] = useState(null);
+
+  const clearPermissionIssue = useCallback(() => {
+    setPermissionIssue(null);
+  }, []);
 
   const getAudioContext = useCallback(() => {
     if (!audioContextRef.current) {
@@ -38,29 +37,29 @@ export function useAudio() {
     return audioContextRef.current;
   }, []);
 
-  const speak = useCallback((text) => {
-    if (!text) {
-      return Promise.resolve();
-    }
-
-    if (!getSoundEnabled()) {
-      return Promise.resolve();
-    }
-
-    if (!('speechSynthesis' in window)) {
-      return delay(LEARN_SILENCE_MS);
-    }
-
-    return new Promise((resolve) => {
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'pl-PL';
-      utterance.rate = getSpeechRate();
-      utterance.pitch = 1.1;
-      utterance.onend = () => resolve();
-      utterance.onerror = () => resolve();
-      window.speechSynthesis.speak(utterance);
+  const speak = useCallback(async (text) => {
+    const result = await speakText(text, {
+      enabled: getSoundEnabled(),
+      rate: getSpeechRate(),
     });
+
+    if (result?.issue) {
+      setPermissionIssue(result.issue);
+    } else if (result?.ok) {
+      setPermissionIssue(null);
+    }
+
+    return result;
+  }, []);
+
+  const unlockAudio = useCallback(async () => {
+    const result = await unlockAudioPlayback();
+    if (result?.issue) {
+      setPermissionIssue(result.issue);
+    } else if (result?.ok) {
+      setPermissionIssue(null);
+    }
+    return result;
   }, []);
 
   const playSuccess = useCallback(() => {
@@ -68,12 +67,16 @@ export function useAudio() {
 
     try {
       const ctx = getAudioContext();
+      if (ctx.state === 'suspended') {
+        setPermissionIssue(ISSUE_BLOCKED);
+        return;
+      }
       const now = ctx.currentTime;
       playTone(ctx, 523, now, 0.15);
       playTone(ctx, 659, now + 0.15, 0.15);
       playTone(ctx, 784, now + 0.3, 0.25);
     } catch {
-      // Audio not available
+      setPermissionIssue(ISSUE_NO_AUDIO);
     }
   }, [getAudioContext]);
 
@@ -82,12 +85,24 @@ export function useAudio() {
 
     try {
       const ctx = getAudioContext();
+      if (ctx.state === 'suspended') {
+        setPermissionIssue(ISSUE_BLOCKED);
+        return;
+      }
       const now = ctx.currentTime;
       playTone(ctx, 220, now, 0.3, 'triangle', 0.2);
     } catch {
-      // Audio not available
+      setPermissionIssue(ISSUE_NO_AUDIO);
     }
   }, [getAudioContext]);
 
-  return { speak, playSuccess, playWrong, soundEnabled: getSoundEnabled() };
+  return {
+    speak,
+    playSuccess,
+    playWrong,
+    unlockAudio,
+    permissionIssue,
+    clearPermissionIssue,
+    soundEnabled: getSoundEnabled(),
+  };
 }

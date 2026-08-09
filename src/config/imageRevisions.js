@@ -35,7 +35,6 @@ export const imageRevisions = {
   "/img/car-brands/jaguar.png": "1ca91b80f5eb332e2812ff3e34b8f08a",
   "/img/car-brands/jeep.png": "0145d367608835f1c638847fb48128f8",
   "/img/car-brands/kia.png": "7921d114247992c4920364d361b5edd8",
-  "/img/car-brands/koenigsegg.png": "6b0808266f442d05b110e640a74eec51",
   "/img/car-brands/lamborghini.png": "3f4743c807b102166c5fbe9ffae38141",
   "/img/car-brands/land-rover.png": "857a5a7b74f9c2b225d4d370a979b699",
   "/img/car-brands/lexus.png": "8d4dc2ed29f7469141c2926a66e45080",

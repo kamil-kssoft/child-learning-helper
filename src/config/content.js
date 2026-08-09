@@ -132,7 +132,6 @@ const carBrandItems = [
   { value: 'car-brands/jaguar.png', label: 'jaguar' },
   { value: 'car-brands/jeep.png', label: 'dżip' },
   { value: 'car-brands/kia.png', label: 'kia' },
-  { value: 'car-brands/koenigsegg.png', label: 'kenigseg' },
   { value: 'car-brands/lamborghini.png', label: 'lamborghini' },
   { value: 'car-brands/land-rover.png', label: 'land rover' },
   { value: 'car-brands/lexus.png', label: 'lexus' },

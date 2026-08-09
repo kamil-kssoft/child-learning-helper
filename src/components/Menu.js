@@ -22,6 +22,7 @@ import {
   spaceItems,
   sportItems,
   instrumentItems,
+  flagItems,
 } from '../config/content';
 import {
   getDirectionCompletedCount,
@@ -107,6 +108,7 @@ function Menu() {
           { labelKey: 'menu.item.space', icon: '🚀', path: '/space?a=1', progressKey: 'space', totalItems: spaceItems.length },
           { labelKey: 'menu.item.sports', icon: '⚽', path: '/sports?a=1', progressKey: 'sports', totalItems: sportItems.length },
           { labelKey: 'menu.item.instruments', icon: '🎸', path: '/instruments?a=1', progressKey: 'instruments', totalItems: instrumentItems.length },
+          { labelKey: 'menu.item.flags', icon: '🏳️', path: '/flags?a=1', progressKey: 'flags', totalItems: flagItems.length },
         ],
       },
     ];

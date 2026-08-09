@@ -19,6 +19,7 @@ import Vehicles from './components/Vehicles';
 import CarBrands from './components/CarBrands';
 import Emotions from './components/Emotions';
 import Counting from './components/Counting';
+import Flags from './components/Flags';
 import BasicWords from './components/BasicWords';
 import SoundSettings from './components/SoundSettings';
 import PwaUpdateBanner from './components/PwaUpdateBanner';
@@ -50,6 +51,7 @@ function App() {
           <Route path="/emotions" element={<Emotions />} />
           <Route path="/sound" element={<SoundSettings />} />
           <Route path="/counting" element={<Counting />} />
+          <Route path="/flags" element={<Flags />} />
           <Route path="/basic-words" element={<BasicWords />} />
           <Route path="*" element={<Navigate to="/menu" />} />
         </Routes>

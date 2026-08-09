@@ -36,6 +36,7 @@ const pl = {
   'menu.item.space': 'Kosmos',
   'menu.item.sports': 'Sport',
   'menu.item.instruments': 'Instrumenty',
+  'menu.item.flags': 'Flagi',
 
   'back.menu': '← Menu',
   'back.aria': 'Wróć do menu',
@@ -68,6 +69,7 @@ const pl = {
   'category.spaceObject': 'obiekt',
   'category.sport': 'sport',
   'category.instrument': 'instrument',
+  'category.flag': 'flagę',
 
   'base.empty': 'Brak elementów do nauki.',
   'base.quizTooFew': 'Za mało elementów do quizu. Wyłącz tryb quizu w menu.',

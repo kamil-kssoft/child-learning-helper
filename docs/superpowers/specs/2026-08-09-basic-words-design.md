@@ -137,7 +137,7 @@ Parametr `randomize` z globalnego ustawienia menu (jak inne kategorie). **Bez** 
 
 | Kontekst | `progressKey` | `max` |
 |----------|---------------|-------|
-| Menu — kafelek kierunku | `basic-words:pl-to-en` (agregat) | 50 |
+| Menu — kafelek kierunku | agregat liczony z 5 kluczy `level-N` (nie osobny wpis w storage) | 50 |
 | Ekran poziomów — poziom N | `basic-words:pl-to-en:level-N` | 10 |
 | Sesja nauki | licznik runtime (nie localStorage) | 10 |
 

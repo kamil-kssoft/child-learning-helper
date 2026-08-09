@@ -1,0 +1,124 @@
+.basic-words-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  height: 100dvh;
+  width: 100%;
+  max-width: 100%;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.basic-words-levels {
+  width: 100%;
+  max-width: 480px;
+  padding: 0 1rem 2rem;
+  box-sizing: border-box;
+}
+
+.basic-words-levels-title {
+  font-size: clamp(1.25rem, 5vw, 1.75rem);
+  text-align: center;
+  margin: 0.5rem 0 1.25rem;
+  color: #333;
+}
+
+.basic-words-level-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 1rem 1.25rem;
+  margin-bottom: 0.75rem;
+  border: 2px solid #ddd;
+  border-radius: 1rem;
+  background: #f8f9fa;
+  text-decoration: none;
+  color: inherit;
+  box-sizing: border-box;
+}
+
+.basic-words-level-item:hover {
+  background: #eef1f4;
+}
+
+.basic-words-level-label {
+  flex: 1;
+  font-size: clamp(1rem, 4.5vw, 1.25rem);
+  font-weight: 600;
+}
+
+.basic-words-level-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.basic-words-tiles {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  width: 100%;
+  max-width: 100%;
+  padding: 12px;
+  padding-top: 72px;
+  box-sizing: border-box;
+}
+
+.basic-words-tile {
+  flex: 1 1 100%;
+  max-width: min(400px, calc(100% - 24px));
+  max-height: 400px;
+  min-width: 0;
+  min-height: min(200px, 40vw);
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  cursor: pointer;
+  user-select: none;
+  border: 3px solid #ccc;
+  border-radius: 16px;
+  background-color: #f8f9fa;
+  overflow: hidden;
+  transition: opacity 0.2s ease;
+  box-sizing: border-box;
+}
+
+.basic-words-tile.tile-waiting {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.basic-words-source {
+  font-size: clamp(1.25rem, 6vw, 2.25rem);
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.2;
+  word-break: break-word;
+  max-width: 100%;
+}
+
+.basic-words-target {
+  font-size: clamp(1rem, 5vw, 1.75rem);
+  font-weight: 500;
+  color: #555;
+  text-align: center;
+  line-height: 1.2;
+  word-break: break-word;
+  max-width: 100%;
+}
+
+.basic-words-target-hidden {
+  visibility: hidden;
+  height: 0;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}

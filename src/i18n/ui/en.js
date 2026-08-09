@@ -13,6 +13,9 @@ const en = {
   'menu.section.emotions': 'Emotions',
   'menu.section.dailyLife': 'Daily life',
   'menu.section.worldPlay': 'World & play',
+  'menu.section.language': 'Language',
+  'menu.item.basicWordsPlTo': 'Polish → {lang}',
+  'menu.item.basicWordsToPl': '{lang} → Polish',
   'menu.item.numbers': 'Numbers 0–40',
   'menu.item.uppercase': 'Uppercase letters A–Z',
   'menu.item.lowercase': 'Lowercase letters a–z',
@@ -102,6 +105,15 @@ const en = {
   'pwa.install.dismiss': 'Dismiss',
   'pwa.update.text': 'A new version of the app is available',
   'pwa.update.button': 'Refresh',
+
+  'basicWords.levelTitle': 'Level {level} — {theme}',
+  'basicWords.direction.plToForeign': 'Polish → {lang}',
+  'basicWords.direction.foreignToPl': '{lang} → Polish',
+  'basicWords.level1.theme': 'Greetings',
+  'basicWords.level2.theme': 'Politeness',
+  'basicWords.level3.theme': 'Daily phrases',
+  'basicWords.level4.theme': 'Family',
+  'basicWords.level5.theme': 'Home & school',
 };
 
 export default en;

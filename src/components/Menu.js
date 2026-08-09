@@ -23,12 +23,18 @@ import {
   sportItems,
   instrumentItems,
 } from '../config/content';
-import { useT } from '../i18n/LocaleContext';
+import {
+  getDirectionCompletedCount,
+  TOTAL_BASIC_WORDS,
+} from '../config/basicWords';
+import { useLocale, useT } from '../i18n/LocaleContext';
+import { LOCALE_META } from '../i18n/locales';
 import './Menu.css';
 import './ProgressBar.css';
 
 function Menu() {
   const t = useT();
+  const { locale } = useLocale();
   const { getCompletedCount } = useLearningProgress();
   const [randomize, setRandomize] = useState(() =>
     JSON.parse(localStorage.getItem('randomize') || 'false')
@@ -46,8 +52,8 @@ function Menu() {
     localStorage.setItem('quizCount', JSON.stringify(quizCount));
   }, [randomize, testMode, quizCount]);
 
-  const menuSections = useMemo(
-    () => [
+  const menuSections = useMemo(() => {
+    const sections = [
       {
         titleKey: 'menu.section.basics',
         items: [
@@ -103,14 +109,47 @@ function Menu() {
           { labelKey: 'menu.item.instruments', icon: '🎸', path: '/instruments?a=1', progressKey: 'instruments', totalItems: instrumentItems.length },
         ],
       },
-    ],
-    []
-  );
+    ];
+
+    if (locale !== 'pl') {
+      const foreignLabel = LOCALE_META[locale]?.label || locale;
+      sections.splice(1, 0, {
+        titleKey: 'menu.section.language',
+        items: [
+          {
+            labelKey: 'menu.item.basicWordsPlTo',
+            labelParams: { lang: foreignLabel },
+            icon: '💬',
+            path: `/basic-words?dir=pl-to-${locale}`,
+            isBasicWords: true,
+            dir: `pl-to-${locale}`,
+            totalItems: TOTAL_BASIC_WORDS,
+          },
+          {
+            labelKey: 'menu.item.basicWordsToPl',
+            labelParams: { lang: foreignLabel },
+            icon: '💬',
+            path: `/basic-words?dir=${locale}-to-pl`,
+            isBasicWords: true,
+            dir: `${locale}-to-pl`,
+            totalItems: TOTAL_BASIC_WORDS,
+          },
+        ],
+      });
+    }
+
+    return sections;
+  }, [locale]);
 
   const getPath = (basePath) => {
     const randomizeMode = randomize ? 1 : 0;
     const count = testMode ? quizCount : 1;
     return `${basePath}&count=${count}&randomize=${randomizeMode}`;
+  };
+
+  const getBasicWordsPath = (basePath) => {
+    const randomizeMode = randomize ? 1 : 0;
+    return `${basePath}&randomize=${randomizeMode}`;
   };
 
   return (
@@ -168,12 +207,19 @@ function Menu() {
         <div key={section.titleKey} className="menu-section">
           <h2 className="menu-section-title">{t(section.titleKey)}</h2>
           {section.items.map((item) => {
-            const completed = getCompletedCount(item.progressKey);
+            const completed = item.isBasicWords
+              ? getDirectionCompletedCount(item.dir, getCompletedCount)
+              : getCompletedCount(item.progressKey);
+            const linkPath = item.isBasicWords
+              ? getBasicWordsPath(item.path)
+              : getPath(item.path);
             return (
-              <Link key={item.labelKey} to={getPath(item.path)} className="menu-item">
+              <Link key={item.labelKey} to={linkPath} className="menu-item">
                 <span className="menu-icon">{item.icon}</span>
                 <div className="menu-item-content">
-                  <span className="menu-item-label">{t(item.labelKey)}</span>
+                  <span className="menu-item-label">
+                    {t(item.labelKey, item.labelParams)}
+                  </span>
                   <ProgressBar
                     className="menu-progress"
                     value={completed}

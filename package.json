@@ -15,7 +15,7 @@
     "workbox-strategies": "^6.6.0"
   },
   "scripts": {
-    "prebuild": "node scripts/generate-image-revisions.js",
+    "prebuild": "node scripts/generate-image-revisions.js && python3 scripts/generate-app-icons.py",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

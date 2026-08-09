@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Zabawa">
+  <rect x="32" y="32" width="448" height="448" rx="64" fill="#4a90d9"/>
+  <rect x="118" y="198" width="220" height="152" rx="12" fill="#6BCB77"/>
+  <rect x="118" y="198" width="48" height="152" fill="#3a7bc8"/>
+  <rect x="190" y="142" width="220" height="152" rx="12" fill="#ff9f43"/>
+  <rect x="190" y="142" width="48" height="152" fill="#dc7828"/>
+  <rect x="248" y="162" width="148" height="112" fill="#fff8f0"/>
+  <line x1="268" y1="198" x2="388" y2="198" stroke="#c8d4e0" stroke-width="8"/>
+  <line x1="268" y1="228" x2="388" y2="228" stroke="#c8d4e0" stroke-width="8"/>
+  <line x1="268" y1="258" x2="360" y2="258" stroke="#c8d4e0" stroke-width="8"/>
+</svg>

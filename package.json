@@ -14,8 +14,13 @@
     "workbox-routing": "^6.6.0",
     "workbox-strategies": "^6.6.0"
   },
+  "devDependencies": {
+    "sharp": "^0.33.5",
+    "to-ico": "^1.1.5"
+  },
   "scripts": {
-    "prebuild": "node scripts/generate-image-revisions.js && python3 scripts/generate-app-icons.py",
+    "prebuild": "node scripts/generate-image-revisions.js",
+    "generate:icons": "node scripts/generate-app-icons.js",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

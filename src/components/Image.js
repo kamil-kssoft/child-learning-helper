@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { BaseItem } from './BaseItem';
-import { animalItems } from '../config/content';
+import { animalItems, getItemLabel } from '../config/content';
+import { useLocale, useT } from '../i18n/LocaleContext';
 import './Image.css';
 
 const ANIMAL_FALLBACK = '🐾';
@@ -29,17 +30,21 @@ function AnimalTile({ filename, label }) {
 }
 
 function Image() {
+  const { locale } = useLocale();
+  const t = useT();
   const values = animalItems.map((a) => a.value);
-  const getItemLabel = (filename) =>
-    animalItems.find((a) => a.value === filename)?.label || filename;
+  const resolveLabel = (filename) => {
+    const item = animalItems.find((a) => a.value === filename);
+    return item ? getItemLabel(item, locale) : filename;
+  };
 
   return (
     <BaseItem
       values={values}
-      getItemLabel={getItemLabel}
-      categoryLabel="zwierzę"
+      getItemLabel={resolveLabel}
+      categoryLabel={t('category.animal')}
       renderContent={(item) => ({
-        content: <AnimalTile filename={item} label={getItemLabel(item)} />,
+        content: <AnimalTile filename={item} label={resolveLabel(item)} />,
       })}
     />
   );

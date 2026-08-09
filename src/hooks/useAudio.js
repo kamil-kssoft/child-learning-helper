@@ -7,6 +7,8 @@ import {
 } from '../utils/audioSettings';
 import { ISSUE_BLOCKED, ISSUE_NO_AUDIO } from '../utils/audioPermissions';
 import { speakText, unlockAudioPlayback } from '../utils/speech';
+import { useLocale } from '../i18n/LocaleContext';
+import { getSpeechLang } from '../i18n/locales';
 
 function playTone(audioContext, frequency, startTime, duration, type = 'sine', volume = 0.3) {
   const oscillator = audioContext.createOscillator();
@@ -25,6 +27,8 @@ function playTone(audioContext, frequency, startTime, duration, type = 'sine', v
 }
 
 export function useAudio() {
+  const { locale } = useLocale();
+  const speechLang = getSpeechLang(locale);
   const audioContextRef = useRef(null);
   const [permissionIssue, setPermissionIssue] = useState(null);
   const [audioUnlocked, setAudioUnlockedState] = useState(() => isAudioUnlocked());
@@ -47,6 +51,7 @@ export function useAudio() {
     const result = await speakText(text, {
       enabled: getSoundEnabled(),
       rate: getSpeechRate(),
+      lang: speechLang,
     });
 
     if (result?.issue) {
@@ -56,7 +61,7 @@ export function useAudio() {
     }
 
     return result;
-  }, []);
+  }, [speechLang]);
 
   const unlockAudio = useCallback(async () => {
     const result = await unlockAudioPlayback();

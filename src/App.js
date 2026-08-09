@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { LocaleProvider } from './i18n/LocaleContext';
 import Menu from './components/Menu';
 import Colors from './components/Colors';
 import Learn from './components/Learn';
@@ -15,23 +16,25 @@ import './App.css';
 
 function App() {
   return (
-    <Router>
-      <PwaUpdateBanner />
-      <Routes>
-        <Route path="/menu" element={<Menu />} />
-        <Route path="/colors" element={<Colors />} />
-        <Route path="/learn" element={<Learn />} />
-        <Route path="/image" element={<Image />} />
-        <Route path="/shapes" element={<Shapes />} />
-        <Route path="/fruits" element={<Fruits />} />
-        <Route path="/vehicles" element={<Vehicles />} />
-        <Route path="/car-brands" element={<CarBrands />} />
-        <Route path="/emotions" element={<Emotions />} />
-        <Route path="/sound" element={<SoundSettings />} />
-        <Route path="/counting" element={<Counting />} />
-        <Route path="*" element={<Navigate to="/menu" />} />
-      </Routes>
-    </Router>
+    <LocaleProvider>
+      <Router>
+        <PwaUpdateBanner />
+        <Routes>
+          <Route path="/menu" element={<Menu />} />
+          <Route path="/colors" element={<Colors />} />
+          <Route path="/learn" element={<Learn />} />
+          <Route path="/image" element={<Image />} />
+          <Route path="/shapes" element={<Shapes />} />
+          <Route path="/fruits" element={<Fruits />} />
+          <Route path="/vehicles" element={<Vehicles />} />
+          <Route path="/car-brands" element={<CarBrands />} />
+          <Route path="/emotions" element={<Emotions />} />
+          <Route path="/sound" element={<SoundSettings />} />
+          <Route path="/counting" element={<Counting />} />
+          <Route path="*" element={<Navigate to="/menu" />} />
+        </Routes>
+      </Router>
+    </LocaleProvider>
   );
 }
 

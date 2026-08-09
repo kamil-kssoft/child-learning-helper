@@ -51,13 +51,20 @@ function waitForVoices(speechSynthesis, waitMs = VOICES_WAIT_MS) {
   });
 }
 
-function pickPolishVoice(voices) {
+function pickVoiceForLang(voices, speechLang = 'pl-PL') {
   if (!voices || voices.length === 0) return null;
+  const target = String(speechLang || 'pl-PL').toLowerCase();
+  const prefix = target.split('-')[0];
   return (
-    voices.find((voice) => voice.lang && voice.lang.toLowerCase() === 'pl-pl') ||
-    voices.find((voice) => voice.lang && voice.lang.toLowerCase().startsWith('pl')) ||
+    voices.find((voice) => voice.lang && voice.lang.toLowerCase() === target) ||
+    voices.find((voice) => voice.lang && voice.lang.toLowerCase().startsWith(prefix)) ||
     null
   );
+}
+
+/** @deprecated Use pickVoiceForLang */
+function pickPolishVoice(voices) {
+  return pickVoiceForLang(voices, 'pl-PL');
 }
 
 function okResult() {
@@ -125,7 +132,10 @@ async function unlockAudioPlayback() {
  * Always settles, even on older phones where speak() can hang without onend/onerror.
  * Resolves to { ok, issue }.
  */
-function speakText(text, { enabled = true, rate = 0.85, timeoutMs = SPEAK_TIMEOUT_MS } = {}) {
+function speakText(
+  text,
+  { enabled = true, rate = 0.85, timeoutMs = SPEAK_TIMEOUT_MS, lang = 'pl-PL' } = {}
+) {
   if (!text) {
     return Promise.resolve(okResult());
   }
@@ -138,6 +148,8 @@ function speakText(text, { enabled = true, rate = 0.85, timeoutMs = SPEAK_TIMEOU
   if (!speechSynthesis) {
     return delay(LEARN_SILENCE_MS).then(() => issueResult(ISSUE_UNSUPPORTED));
   }
+
+  const speechLang = lang || 'pl-PL';
 
   return new Promise((resolve) => {
     let settled = false;
@@ -172,13 +184,13 @@ function speakText(text, { enabled = true, rate = 0.85, timeoutMs = SPEAK_TIMEOU
 
       try {
         const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'pl-PL';
+        utterance.lang = speechLang;
         utterance.rate = rate;
         utterance.pitch = 1.1;
 
-        const polishVoice = pickPolishVoice(voices);
-        if (polishVoice) {
-          utterance.voice = polishVoice;
+        const matchedVoice = pickVoiceForLang(voices, speechLang);
+        if (matchedVoice) {
+          utterance.voice = matchedVoice;
         }
 
         utterance.onstart = () => {
@@ -231,5 +243,6 @@ export {
   unlockAudioPlayback,
   speakText,
   waitForVoices,
+  pickVoiceForLang,
   pickPolishVoice,
 };

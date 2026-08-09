@@ -1,5 +1,6 @@
 import CategoryView from './CategoryView';
 import { countingItems } from '../config/content';
+import { useT } from '../i18n/LocaleContext';
 
 function CountingTile({ item }) {
   const entry = countingItems.find((c) => c.value === item);
@@ -25,10 +26,11 @@ function CountingTile({ item }) {
 }
 
 function Counting() {
+  const t = useT();
   return (
     <CategoryView
       items={countingItems}
-      categoryLabel="liczba"
+      categoryLabel={t('category.count')}
       renderContent={(item) => ({
         content: <CountingTile item={item} />,
       })}

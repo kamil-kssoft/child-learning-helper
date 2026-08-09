@@ -36,6 +36,7 @@ const it = {
   'menu.item.space': 'Spazio',
   'menu.item.sports': 'Sport',
   'menu.item.instruments': 'Strumenti',
+  'menu.item.flags': 'Bandiere',
 
   'back.menu': '← Menu',
   'back.aria': 'Torna al menu',
@@ -68,6 +69,7 @@ const it = {
   'category.spaceObject': 'oggetto',
   'category.sport': 'sport',
   'category.instrument': 'strumento',
+  'category.flag': 'bandiera',
 
   'base.empty': 'Nessun elemento da imparare.',
   'base.quizTooFew': 'Non ci sono abbastanza elementi per il quiz. Disattiva la modalità quiz nel menu.',

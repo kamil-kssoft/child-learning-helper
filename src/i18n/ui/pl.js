@@ -69,6 +69,9 @@ const pl = {
   'base.empty': 'Brak elementów do nauki.',
   'base.quizTooFew': 'Za mało elementów do quizu. Wyłącz tryb quizu w menu.',
 
+  'progress.session': '{current} / {total}',
+  'progress.category': '{completed} z {total} ukończonych',
+
   'sound.title': '🔊 Ustawienia dźwięku',
   'sound.enabled': 'Dźwięk włączony',
   'sound.rate': 'Tempo mowy: {rate}',

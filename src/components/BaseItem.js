@@ -4,9 +4,13 @@ import { useAudio } from '../hooks/useAudio';
 import { useT } from '../i18n/LocaleContext';
 import BackButton from './BackButton';
 import Feedback from './Feedback';
+import ProgressBar from './ProgressBar';
 import SoundPermissionMessage from './SoundPermissionMessage';
 import SoundUnlockBanner from './SoundUnlockBanner';
+import { useLearningProgress } from '../hooks/useLearningProgress';
+import { getProgressKey } from '../utils/learningProgress';
 import './Feedback.css';
+import './ProgressBar.css';
 import './BaseItem.css';
 
 export function BaseItem({ values, style, renderContent, getItemLabel, categoryLabel = '' }) {
@@ -37,6 +41,8 @@ export function BaseItem({ values, style, renderContent, getItemLabel, categoryL
     clearPermissionIssue,
   } = useAudio();
   const feedbackTimeoutRef = useRef(null);
+  const { markComplete } = useLearningProgress();
+  const progressKey = useMemo(() => getProgressKey(), []);
 
   const labelFor = useCallback(
     (item) => (getItemLabel ? getItemLabel(item) : String(item)),
@@ -123,6 +129,15 @@ export function BaseItem({ values, style, renderContent, getItemLabel, categoryL
     };
   }, []);
 
+  const recordTaskComplete = useCallback(
+    (item) => {
+      if (item != null) {
+        markComplete(progressKey, item);
+      }
+    },
+    [markComplete, progressKey]
+  );
+
   const advanceToNext = useCallback(() => {
     if (currentSequenceIdx < currentSequences.length - 1) {
       setCurrentSequenceIdx((prev) => prev + 1);
@@ -156,8 +171,9 @@ export function BaseItem({ values, style, renderContent, getItemLabel, categoryL
       window.speechSynthesis?.cancel();
     }
 
+    recordTaskComplete(learnItem);
     advanceToNext();
-  }, [isAdvancing, currentItems, advanceToNext]);
+  }, [isAdvancing, currentItems, learnItem, recordTaskComplete, advanceToNext]);
 
   const handleQuizClick = useCallback(
     (tileIdx) => {
@@ -169,6 +185,7 @@ export function BaseItem({ values, style, renderContent, getItemLabel, categoryL
           speak(t('feedback.success'));
           playSuccess();
         }
+        recordTaskComplete(correctItem);
         showFeedback('success', advanceToNext);
       } else {
         setWrongTileIdx(tileIdx);
@@ -188,10 +205,22 @@ export function BaseItem({ values, style, renderContent, getItemLabel, categoryL
       playSuccess,
       playWrong,
       showFeedback,
+      recordTaskComplete,
       advanceToNext,
       t,
     ]
   );
+
+  const sessionProgressClass = [
+    'session-progress',
+    isQuizMode ? 'session-progress-below-prompt' : '',
+    soundEnabled && permissionIssue ? 'session-progress-below-alert' : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
+
+  const sessionCurrent = currentSequences.length > 0 ? currentSequenceIdx + 1 : 0;
+  const sessionTotal = currentSequences.length;
 
   const handleTileClick = isQuizMode ? handleQuizClick : () => handleLearnClick();
 
@@ -246,6 +275,16 @@ export function BaseItem({ values, style, renderContent, getItemLabel, categoryL
             : t('quiz.findPrefix')}
           <strong>{correctLabel}</strong>
         </div>
+      )}
+
+      {sessionTotal > 0 && (
+        <ProgressBar
+          className={sessionProgressClass}
+          value={sessionCurrent}
+          max={sessionTotal}
+          showLabel
+          label={t('progress.session', { current: sessionCurrent, total: sessionTotal })}
+        />
       )}
 
       <div

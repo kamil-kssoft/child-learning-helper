@@ -3,6 +3,7 @@ import { generateArrayWithSubitems } from '../utils/arrayUtils';
 import { useAudio } from '../hooks/useAudio';
 import BackButton from './BackButton';
 import Feedback from './Feedback';
+import SoundPermissionMessage from './SoundPermissionMessage';
 import './Feedback.css';
 import './BaseItem.css';
 
@@ -28,7 +29,14 @@ export function BaseItem({ values, style, renderContent, getItemLabel, categoryL
   const [isLocked, setIsLocked] = useState(false);
   const [isAdvancing, setIsAdvancing] = useState(false);
 
-  const { speak, playSuccess, playWrong, soundEnabled } = useAudio();
+  const {
+    speak,
+    playSuccess,
+    playWrong,
+    soundEnabled,
+    permissionIssue,
+    clearPermissionIssue,
+  } = useAudio();
   const feedbackTimeoutRef = useRef(null);
 
   const labelFor = useCallback(
@@ -182,8 +190,17 @@ export function BaseItem({ values, style, renderContent, getItemLabel, categoryL
       <BackButton />
       <Feedback type={feedback} />
 
+      {soundEnabled && permissionIssue && (
+        <div className="sound-permission-banner">
+          <SoundPermissionMessage
+            issue={permissionIssue}
+            onDismiss={clearPermissionIssue}
+          />
+        </div>
+      )}
+
       {isQuizMode && correctLabel && (
-        <div className="quiz-prompt">
+        <div className={`quiz-prompt${soundEnabled && permissionIssue ? ' quiz-prompt-below-alert' : ''}`}>
           Znajdź{categoryLabel ? ` ${categoryLabel}` : ''}: <strong>{correctLabel}</strong>
         </div>
       )}

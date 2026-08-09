@@ -1,6 +1,7 @@
 import { speakText, SPEAK_TIMEOUT_MS, unlockAudioPlayback } from './speech';
+import { ISSUE_BLOCKED, ISSUE_UNSUPPORTED } from './audioPermissions';
 
-function createSpeechSynthesisMock({ hang = false, voices = [] } = {}) {
+function createSpeechSynthesisMock({ hang = false, voices = [], error = null } = {}) {
   const listeners = {};
   const mock = {
     paused: false,
@@ -18,11 +19,22 @@ function createSpeechSynthesisMock({ hang = false, voices = [] } = {}) {
     removeEventListener: jest.fn((event, handler) => {
       listeners[event] = (listeners[event] || []).filter((h) => h !== handler);
     }),
-    speak: jest.fn((utterance) => {
+    speak: jest.fn(function speak(utterance) {
       if (hang) {
         // Older phones: speak() queues work but never fires onend/onerror.
         return;
       }
+      if (error) {
+        if (utterance.onerror) {
+          utterance.onerror({ error });
+        }
+        return;
+      }
+      this.speaking = true;
+      if (utterance.onstart) {
+        utterance.onstart();
+      }
+      this.speaking = false;
       if (utterance.onend) {
         utterance.onend();
       }
@@ -36,6 +48,7 @@ function createSpeechSynthesisMock({ hang = false, voices = [] } = {}) {
 
 describe('speakText', () => {
   const OriginalUtterance = global.SpeechSynthesisUtterance;
+  const OriginalAudioContext = window.AudioContext;
 
   beforeEach(() => {
     jest.useFakeTimers();
@@ -44,10 +57,17 @@ describe('speakText', () => {
       this.lang = '';
       this.rate = 1;
       this.pitch = 1;
+      this.volume = 1;
       this.voice = null;
       this.onend = null;
       this.onerror = null;
+      this.onstart = null;
     };
+    window.AudioContext = jest.fn(() => ({
+      state: 'running',
+      resume: jest.fn(async () => {}),
+      close: jest.fn(async () => {}),
+    }));
   });
 
   afterEach(() => {
@@ -55,6 +75,7 @@ describe('speakText', () => {
     jest.useRealTimers();
     delete window.speechSynthesis;
     global.SpeechSynthesisUtterance = OriginalUtterance;
+    window.AudioContext = OriginalAudioContext;
   });
 
   test('resolves even when speechSynthesis hangs without onend/onerror (older phones)', async () => {
@@ -65,13 +86,12 @@ describe('speakText', () => {
 
     const promise = speakText('pies', { timeoutMs: 1000 });
 
-    // Flush waitForVoices microtask, then the post-cancel speak delay.
     await Promise.resolve();
     jest.advanceTimersByTime(0);
     expect(window.speechSynthesis.speak).toHaveBeenCalled();
 
     jest.advanceTimersByTime(1000);
-    await expect(promise).resolves.toBeUndefined();
+    await expect(promise).resolves.toEqual({ ok: false, issue: ISSUE_BLOCKED });
   });
 
   test('resolves on onend when speech works', async () => {
@@ -85,25 +105,53 @@ describe('speakText', () => {
     await Promise.resolve();
     jest.advanceTimersByTime(0);
 
-    await expect(promise).resolves.toBeUndefined();
+    await expect(promise).resolves.toEqual({ ok: true, issue: null });
   });
 
   test('returns immediately when sound is disabled', async () => {
     window.speechSynthesis = createSpeechSynthesisMock({ hang: true });
-    await expect(speakText('pies', { enabled: false })).resolves.toBeUndefined();
+    await expect(speakText('pies', { enabled: false })).resolves.toEqual({
+      ok: true,
+      issue: null,
+    });
     expect(window.speechSynthesis.speak).not.toHaveBeenCalled();
   });
 
-  test('unlockAudioPlayback speaks a silent utterance on user gesture (Brave/Chrome)', () => {
+  test('reports blocked when speech errors with not-allowed', async () => {
+    window.speechSynthesis = createSpeechSynthesisMock({
+      error: 'not-allowed',
+      voices: [{ lang: 'pl-PL', name: 'Polish' }],
+    });
+
+    const promise = speakText('dom', { timeoutMs: SPEAK_TIMEOUT_MS });
+    await Promise.resolve();
+    jest.advanceTimersByTime(0);
+
+    await expect(promise).resolves.toEqual({ ok: false, issue: ISSUE_BLOCKED });
+  });
+
+  test('unlockAudioPlayback speaks a silent utterance on user gesture (Brave/Chrome)', async () => {
     window.speechSynthesis = createSpeechSynthesisMock({
       voices: [{ lang: 'pl-PL', name: 'Polish' }],
     });
 
-    unlockAudioPlayback();
+    const promise = unlockAudioPlayback();
+    await Promise.resolve();
+    jest.advanceTimersByTime(0);
 
     expect(window.speechSynthesis.speak).toHaveBeenCalled();
     const utterance = window.speechSynthesis.speak.mock.calls[0][0];
     expect(utterance.volume).toBe(0);
+
+    await expect(promise).resolves.toEqual({ ok: true, issue: null });
+  });
+
+  test('unlockAudioPlayback reports unsupported without speechSynthesis', async () => {
+    delete window.speechSynthesis;
+    await expect(unlockAudioPlayback()).resolves.toEqual({
+      ok: false,
+      issue: ISSUE_UNSUPPORTED,
+    });
   });
 
   test('resumes paused synthesis after cancel (Chrome/Android quirk)', async () => {
@@ -122,7 +170,7 @@ describe('speakText', () => {
     await Promise.resolve();
     jest.advanceTimersByTime(0);
 
-    await expect(promise).resolves.toBeUndefined();
+    await expect(promise).resolves.toEqual({ ok: true, issue: null });
     expect(synth.cancel).toHaveBeenCalled();
     expect(synth.resume).toHaveBeenCalled();
   });

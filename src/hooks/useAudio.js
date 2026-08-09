@@ -1,5 +1,6 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { getSoundEnabled, getSpeechRate } from '../utils/audioSettings';
+import { ISSUE_BLOCKED, ISSUE_NO_AUDIO } from '../utils/audioPermissions';
 import { speakText, unlockAudioPlayback } from '../utils/speech';
 
 function playTone(audioContext, frequency, startTime, duration, type = 'sine', volume = 0.3) {
@@ -20,6 +21,11 @@ function playTone(audioContext, frequency, startTime, duration, type = 'sine', v
 
 export function useAudio() {
   const audioContextRef = useRef(null);
+  const [permissionIssue, setPermissionIssue] = useState(null);
+
+  const clearPermissionIssue = useCallback(() => {
+    setPermissionIssue(null);
+  }, []);
 
   const getAudioContext = useCallback(() => {
     if (!audioContextRef.current) {
@@ -31,11 +37,29 @@ export function useAudio() {
     return audioContextRef.current;
   }, []);
 
-  const speak = useCallback((text) => {
-    return speakText(text, {
+  const speak = useCallback(async (text) => {
+    const result = await speakText(text, {
       enabled: getSoundEnabled(),
       rate: getSpeechRate(),
     });
+
+    if (result?.issue) {
+      setPermissionIssue(result.issue);
+    } else if (result?.ok) {
+      setPermissionIssue(null);
+    }
+
+    return result;
+  }, []);
+
+  const unlockAudio = useCallback(async () => {
+    const result = await unlockAudioPlayback();
+    if (result?.issue) {
+      setPermissionIssue(result.issue);
+    } else if (result?.ok) {
+      setPermissionIssue(null);
+    }
+    return result;
   }, []);
 
   const playSuccess = useCallback(() => {
@@ -43,12 +67,16 @@ export function useAudio() {
 
     try {
       const ctx = getAudioContext();
+      if (ctx.state === 'suspended') {
+        setPermissionIssue(ISSUE_BLOCKED);
+        return;
+      }
       const now = ctx.currentTime;
       playTone(ctx, 523, now, 0.15);
       playTone(ctx, 659, now + 0.15, 0.15);
       playTone(ctx, 784, now + 0.3, 0.25);
     } catch {
-      // Audio not available
+      setPermissionIssue(ISSUE_NO_AUDIO);
     }
   }, [getAudioContext]);
 
@@ -57,10 +85,14 @@ export function useAudio() {
 
     try {
       const ctx = getAudioContext();
+      if (ctx.state === 'suspended') {
+        setPermissionIssue(ISSUE_BLOCKED);
+        return;
+      }
       const now = ctx.currentTime;
       playTone(ctx, 220, now, 0.3, 'triangle', 0.2);
     } catch {
-      // Audio not available
+      setPermissionIssue(ISSUE_NO_AUDIO);
     }
   }, [getAudioContext]);
 
@@ -68,7 +100,9 @@ export function useAudio() {
     speak,
     playSuccess,
     playWrong,
-    unlockAudio: unlockAudioPlayback,
+    unlockAudio,
+    permissionIssue,
+    clearPermissionIssue,
     soundEnabled: getSoundEnabled(),
   };
 }

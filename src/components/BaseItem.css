@@ -50,6 +50,15 @@
   cursor: wait;
 }
 
+.sound-permission-banner {
+  position: fixed;
+  top: 4.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 95;
+  width: min(92vw, 420px);
+}
+
 .quiz-prompt {
   position: fixed;
   top: 4.5rem;
@@ -65,6 +74,10 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   text-align: center;
   max-width: 90vw;
+}
+
+.quiz-prompt-below-alert {
+  top: 9.5rem;
 }
 
 .quiz-prompt strong {

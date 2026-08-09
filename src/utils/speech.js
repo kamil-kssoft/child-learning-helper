@@ -1,3 +1,9 @@
+import {
+  ISSUE_UNSUPPORTED,
+  ISSUE_BLOCKED,
+  issueFromSpeechError,
+} from './audioPermissions';
+
 const LEARN_SILENCE_MS = 700;
 const SPEAK_TIMEOUT_MS = 4000;
 const VOICES_WAIT_MS = 400;
@@ -54,79 +60,112 @@ function pickPolishVoice(voices) {
   );
 }
 
+function okResult() {
+  return { ok: true, issue: null };
+}
+
+function issueResult(issue) {
+  return { ok: false, issue };
+}
+
 /**
  * Call from a click/tap handler so Brave/Chrome grant autoplay for speech + Web Audio.
- * Does not require microphone permission — only a user gesture (and site sound allowed).
+ * Returns any detected permission/capability issue.
  */
-function unlockAudioPlayback() {
+async function unlockAudioPlayback() {
   const speechSynthesis = getSpeechSynthesis();
-  if (speechSynthesis && typeof SpeechSynthesisUtterance !== 'undefined') {
+  if (!speechSynthesis || typeof SpeechSynthesisUtterance === 'undefined') {
+    return issueResult(ISSUE_UNSUPPORTED);
+  }
+
+  const probeIssue = await new Promise((resolve) => {
+    let settled = false;
+    let timeoutId = null;
+
+    const finish = (issue) => {
+      if (settled) return;
+      settled = true;
+      if (timeoutId !== null) {
+        clearTimeout(timeoutId);
+      }
+      resolve(issue);
+    };
+
     try {
       speechSynthesis.cancel();
       if (speechSynthesis.paused) {
         speechSynthesis.resume();
       }
-      // Silent utterance during a tap unlocks autoplay for later speak() calls
-      // (needed in Brave/Chrome; no microphone permission is involved).
+
       const warmup = new SpeechSynthesisUtterance(' ');
       warmup.volume = 0;
       warmup.rate = 2;
-      speechSynthesis.speak(warmup);
-    } catch {
-      // ignore unlock failures
-    }
-  }
+      warmup.onend = () => finish(null);
+      warmup.onerror = (event) => {
+        finish(issueFromSpeechError(event?.error) || ISSUE_BLOCKED);
+      };
 
-  try {
-    const AudioCtx = window.AudioContext || window.webkitAudioContext;
-    if (AudioCtx) {
-      const ctx = new AudioCtx();
-      if (ctx.state === 'suspended') {
-        ctx.resume();
-      }
-      // Close immediately — useAudio creates its own context later.
-      if (typeof ctx.close === 'function') {
-        ctx.close();
-      }
+      speechSynthesis.speak(warmup);
+
+      // If the engine ignores the utterance with no events, treat as blocked.
+      timeoutId = setTimeout(() => {
+        const stuck = !speechSynthesis.speaking && !speechSynthesis.pending;
+        finish(stuck ? ISSUE_BLOCKED : null);
+      }, 700);
+    } catch {
+      finish(ISSUE_BLOCKED);
     }
-  } catch {
-    // ignore unlock failures
-  }
+  });
+
+  return probeIssue ? issueResult(probeIssue) : okResult();
 }
 
 /**
  * Speak text via the Web Speech API.
  * Always settles, even on older phones where speak() can hang without onend/onerror.
+ * Resolves to { ok, issue }.
  */
 function speakText(text, { enabled = true, rate = 0.85, timeoutMs = SPEAK_TIMEOUT_MS } = {}) {
   if (!text) {
-    return Promise.resolve();
+    return Promise.resolve(okResult());
   }
 
   if (!enabled) {
-    return Promise.resolve();
+    return Promise.resolve(okResult());
   }
 
   const speechSynthesis = getSpeechSynthesis();
   if (!speechSynthesis) {
-    return delay(LEARN_SILENCE_MS);
+    return delay(LEARN_SILENCE_MS).then(() => issueResult(ISSUE_UNSUPPORTED));
   }
 
   return new Promise((resolve) => {
     let settled = false;
     let speakDelayId = null;
+    let sawStart = false;
 
-    const finish = () => {
+    const finish = (issue = null) => {
       if (settled) return;
       settled = true;
       clearTimeout(timeoutId);
+      clearTimeout(startWatchId);
       if (speakDelayId !== null) {
         clearTimeout(speakDelayId);
       }
-      resolve();
+      resolve(issue ? issueResult(issue) : okResult());
     };
 
-    const timeoutId = setTimeout(finish, timeoutMs);
+    const timeoutId = setTimeout(() => {
+      // Hang with no start often means autoplay/sound blocked.
+      finish(sawStart ? null : ISSUE_BLOCKED);
+    }, timeoutMs);
+
+    const startWatchId = setTimeout(() => {
+      if (settled) return;
+      if (speechSynthesis.speaking || speechSynthesis.pending) {
+        sawStart = true;
+      }
+    }, 250);
 
     const queueUtterance = (voices) => {
       if (settled) return;
@@ -142,8 +181,15 @@ function speakText(text, { enabled = true, rate = 0.85, timeoutMs = SPEAK_TIMEOU
           utterance.voice = polishVoice;
         }
 
-        utterance.onend = finish;
-        utterance.onerror = finish;
+        utterance.onstart = () => {
+          sawStart = true;
+        };
+        utterance.onend = () => finish(null);
+        utterance.onerror = (event) => {
+          const issue = issueFromSpeechError(event?.error);
+          // canceled/interrupted while skipping should not look like a permission error
+          finish(issue);
+        };
 
         // Yield after cancel() — older Chrome often drops the next speak() otherwise.
         speakDelayId = setTimeout(() => {
@@ -152,11 +198,11 @@ function speakText(text, { enabled = true, rate = 0.85, timeoutMs = SPEAK_TIMEOU
           try {
             speechSynthesis.speak(utterance);
           } catch {
-            finish();
+            finish(ISSUE_BLOCKED);
           }
         }, 0);
       } catch {
-        finish();
+        finish(ISSUE_BLOCKED);
       }
     };
 
@@ -171,9 +217,9 @@ function speakText(text, { enabled = true, rate = 0.85, timeoutMs = SPEAK_TIMEOU
         // ignore cancel/resume failures on limited engines
       }
 
-      waitForVoices(speechSynthesis).then(queueUtterance, finish);
+      waitForVoices(speechSynthesis).then(queueUtterance, () => finish(ISSUE_BLOCKED));
     } catch {
-      finish();
+      finish(ISSUE_BLOCKED);
     }
   });
 }

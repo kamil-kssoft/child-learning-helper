@@ -61,13 +61,6 @@
   cursor: pointer;
 }
 
-.sound-help {
-  margin: 0;
-  font-size: 0.85rem;
-  line-height: 1.35;
-  color: #555;
-}
-
 .menu-item {
   display: flex;
   align-items: center;

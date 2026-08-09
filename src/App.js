@@ -6,6 +6,7 @@ import Image from './components/Image';
 import Shapes from './components/Shapes';
 import Fruits from './components/Fruits';
 import Vehicles from './components/Vehicles';
+import CarBrands from './components/CarBrands';
 import Emotions from './components/Emotions';
 import Counting from './components/Counting';
 import PwaUpdateBanner from './components/PwaUpdateBanner';
@@ -23,6 +24,7 @@ function App() {
         <Route path="/shapes" element={<Shapes />} />
         <Route path="/fruits" element={<Fruits />} />
         <Route path="/vehicles" element={<Vehicles />} />
+        <Route path="/car-brands" element={<CarBrands />} />
         <Route path="/emotions" element={<Emotions />} />
         <Route path="/counting" element={<Counting />} />
         <Route path="*" element={<Navigate to="/menu" />} />

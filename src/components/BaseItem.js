@@ -28,7 +28,7 @@ export function BaseItem({ values, style, renderContent, getItemLabel, categoryL
   const [isLocked, setIsLocked] = useState(false);
   const [isAdvancing, setIsAdvancing] = useState(false);
 
-  const { speak, playSuccess, playWrong } = useAudio();
+  const { speak, playSuccess, playWrong, soundEnabled } = useAudio();
   const feedbackTimeoutRef = useRef(null);
 
   const labelFor = useCallback(
@@ -61,22 +61,22 @@ export function BaseItem({ values, style, renderContent, getItemLabel, categoryL
   const learnItem = currentItems[0];
 
   useEffect(() => {
-    if (!isQuizMode && learnItem) {
+    if (soundEnabled && !isQuizMode && learnItem) {
       const timer = setTimeout(() => {
         speak(labelFor(learnItem));
       }, 300);
       return () => clearTimeout(timer);
     }
-  }, [currentSequenceIdx, learnItem, isQuizMode, speak, labelFor]);
+  }, [currentSequenceIdx, learnItem, isQuizMode, soundEnabled, speak, labelFor]);
 
   useEffect(() => {
-    if (isQuizMode && correctItem) {
+    if (soundEnabled && isQuizMode && correctItem) {
       const timer = setTimeout(() => {
         speak(buildQuizPrompt(labelFor(correctItem), categoryLabel));
       }, 400);
       return () => clearTimeout(timer);
     }
-  }, [isQuizMode, correctItem, currentSequenceIdx, correctIndex, speak, labelFor, categoryLabel]);
+  }, [isQuizMode, correctItem, currentSequenceIdx, correctIndex, soundEnabled, speak, labelFor, categoryLabel]);
 
   useEffect(() => {
     return () => {
@@ -113,6 +113,11 @@ export function BaseItem({ values, style, renderContent, getItemLabel, categoryL
   const handleLearnClick = useCallback(async () => {
     if (isAdvancing || currentItems.length === 0) return;
 
+    if (!soundEnabled) {
+      advanceToNext();
+      return;
+    }
+
     setIsAdvancing(true);
     try {
       await speak(labelFor(currentItems[0]));
@@ -120,7 +125,7 @@ export function BaseItem({ values, style, renderContent, getItemLabel, categoryL
     } finally {
       setIsAdvancing(false);
     }
-  }, [isAdvancing, currentItems, speak, labelFor, advanceToNext]);
+  }, [isAdvancing, currentItems, soundEnabled, speak, labelFor, advanceToNext]);
 
   const handleQuizClick = useCallback(
     (tileIdx) => {
@@ -128,17 +133,21 @@ export function BaseItem({ values, style, renderContent, getItemLabel, categoryL
 
       if (tileIdx === correctIndex) {
         setIsLocked(true);
-        speak('Brawo!');
-        playSuccess();
+        if (soundEnabled) {
+          speak('Brawo!');
+          playSuccess();
+        }
         showFeedback('success', advanceToNext);
       } else {
         setWrongTileIdx(tileIdx);
-        speak('Spróbuj jeszcze raz');
-        playWrong();
+        if (soundEnabled) {
+          speak('Spróbuj jeszcze raz');
+          playWrong();
+        }
         showFeedback('wrong');
       }
     },
-    [isLocked, correctItem, correctIndex, speak, playSuccess, playWrong, showFeedback, advanceToNext]
+    [isLocked, correctItem, correctIndex, soundEnabled, speak, playSuccess, playWrong, showFeedback, advanceToNext]
   );
 
   const handleTileClick = isQuizMode ? handleQuizClick : () => handleLearnClick();

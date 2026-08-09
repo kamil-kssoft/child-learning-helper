@@ -44,7 +44,7 @@ export function useAudio() {
     }
 
     if (!getSoundEnabled()) {
-      return delay(LEARN_SILENCE_MS);
+      return Promise.resolve();
     }
 
     if (!('speechSynthesis' in window)) {
@@ -89,5 +89,5 @@ export function useAudio() {
     }
   }, [getAudioContext]);
 
-  return { speak, playSuccess, playWrong };
+  return { speak, playSuccess, playWrong, soundEnabled: getSoundEnabled() };
 }

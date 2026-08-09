@@ -1,0 +1,21 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  cicd:
+    uses: kamil-kssoft/pipelines/.github/workflows/ci-cd-vps.yml@main
+    with:
+      deployment-type: docker-registry
+      deploy-branch: master
+      vps-deploy-path: /opt/child-learn
+      copy-compose-via-scp: true
+      compose-file: docker-compose.prod.yml
+      images-json: |
+        [
+          {"context": ".", "file": "./Dockerfile", "image": "child-learning"}
+        ]
+    secrets: inherit

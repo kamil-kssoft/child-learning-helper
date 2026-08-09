@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { DEFAULT_SPEECH_RATE } from '../utils/audioSettings';
+import PwaInstallBanner from './PwaInstallBanner';
 import './Menu.css';
 
 function Menu() {
@@ -75,6 +76,8 @@ function Menu() {
   return (
     <div className="menu-container">
       <h1 className="menu-title">🌈 Zabawa w naukę</h1>
+
+      <PwaInstallBanner />
 
       <div className="options-container">
         <label className="option-label">

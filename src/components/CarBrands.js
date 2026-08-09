@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { BaseItem } from './BaseItem';
-import { carBrandItems } from '../config/content';
+import { carBrandItems, getItemLabel } from '../config/content';
+import { useLocale, useT } from '../i18n/LocaleContext';
 import './CarBrands.css';
 
 const BRAND_FALLBACK = '🚘';
@@ -29,17 +30,21 @@ function BrandTile({ filename, label }) {
 }
 
 function CarBrands() {
+  const { locale } = useLocale();
+  const t = useT();
   const values = carBrandItems.map((b) => b.value);
-  const getItemLabel = (filename) =>
-    carBrandItems.find((b) => b.value === filename)?.label || filename;
+  const resolveLabel = (filename) => {
+    const item = carBrandItems.find((b) => b.value === filename);
+    return item ? getItemLabel(item, locale) : filename;
+  };
 
   return (
     <BaseItem
       values={values}
-      getItemLabel={getItemLabel}
-      categoryLabel="markę"
+      getItemLabel={resolveLabel}
+      categoryLabel={t('category.carBrand')}
       renderContent={(item) => ({
-        content: <BrandTile filename={item} label={getItemLabel(item)} />,
+        content: <BrandTile filename={item} label={resolveLabel(item)} />,
       })}
     />
   );

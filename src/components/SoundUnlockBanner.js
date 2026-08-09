@@ -1,21 +1,20 @@
+import { useT } from '../i18n/LocaleContext';
 import './SoundUnlockBanner.css';
 
 function SoundUnlockBanner({ onUnlock, isUnlocking }) {
+  const t = useT();
   return (
-    <div className="sound-unlock-overlay" role="dialog" aria-modal="true" aria-label="Włącz dźwięk">
+    <div className="sound-unlock-overlay" role="dialog" aria-modal="true" aria-label={t('unlock.aria')}>
       <div className="sound-unlock-panel">
-        <p className="sound-unlock-title">🔊 Włącz dźwięk</p>
-        <p className="sound-unlock-text">
-          Aby usłyszeć nazwy i komunikaty, tapnij przycisk poniżej. Przeglądarka wymaga
-          jednego tapnięcia, żeby zezwolić na odtwarzanie dźwięku.
-        </p>
+        <p className="sound-unlock-title">{t('unlock.title')}</p>
+        <p className="sound-unlock-text">{t('unlock.text')}</p>
         <button
           type="button"
           className="sound-unlock-button"
           onClick={onUnlock}
           disabled={isUnlocking}
         >
-          {isUnlocking ? 'Włączanie…' : 'Tapnij, żeby włączyć dźwięk'}
+          {isUnlocking ? t('unlock.loading') : t('unlock.button')}
         </button>
       </div>
     </div>

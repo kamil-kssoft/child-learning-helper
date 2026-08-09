@@ -1,11 +1,13 @@
 import CategoryView from './CategoryView';
 import { fruitItems } from '../config/content';
+import { useT } from '../i18n/LocaleContext';
 
 function Fruits() {
+  const t = useT();
   return (
     <CategoryView
       items={fruitItems}
-      categoryLabel="owoc"
+      categoryLabel={t('category.fruit')}
       renderContent={(emoji) => ({
         content: emoji,
       })}

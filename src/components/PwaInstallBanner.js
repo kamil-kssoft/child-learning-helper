@@ -1,7 +1,9 @@
 import { usePwaInstall } from '../hooks/usePwaInstall';
+import { useT } from '../i18n/LocaleContext';
 import './PwaInstallBanner.css';
 
 function PwaInstallBanner() {
+  const t = useT();
   const { canShowBanner, canPromptInstall, iosDevice, promptInstall, dismiss } =
     usePwaInstall();
 
@@ -10,16 +12,12 @@ function PwaInstallBanner() {
   }
 
   return (
-    <section className="pwa-install-banner" aria-label="Instalacja aplikacji">
+    <section className="pwa-install-banner" aria-label={t('pwa.install.aria')}>
       <div className="pwa-install-banner-content">
         {iosDevice && !canPromptInstall ? (
-          <p className="pwa-install-banner-text">
-            Dotknij Udostępnij, potem Dodaj do ekranu początkowego
-          </p>
+          <p className="pwa-install-banner-text">{t('pwa.install.ios')}</p>
         ) : (
-          <p className="pwa-install-banner-text">
-            Zainstaluj aplikację na urządzeniu
-          </p>
+          <p className="pwa-install-banner-text">{t('pwa.install.generic')}</p>
         )}
         <div className="pwa-install-banner-actions">
           {canPromptInstall && (
@@ -28,14 +26,14 @@ function PwaInstallBanner() {
               className="pwa-install-banner-button"
               onClick={promptInstall}
             >
-              Zainstaluj
+              {t('pwa.install.button')}
             </button>
           )}
           <button
             type="button"
             className="pwa-install-banner-dismiss"
             onClick={dismiss}
-            aria-label="Zamknij"
+            aria-label={t('pwa.install.dismiss')}
           >
             ✕
           </button>

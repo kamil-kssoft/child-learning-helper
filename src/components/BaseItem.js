@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { generateArrayWithSubitems } from '../utils/arrayUtils';
 import { useAudio } from '../hooks/useAudio';
+import { useT } from '../i18n/LocaleContext';
 import BackButton from './BackButton';
 import Feedback from './Feedback';
 import SoundPermissionMessage from './SoundPermissionMessage';
@@ -8,14 +9,8 @@ import SoundUnlockBanner from './SoundUnlockBanner';
 import './Feedback.css';
 import './BaseItem.css';
 
-function buildQuizPrompt(label, categoryLabel) {
-  if (categoryLabel) {
-    return `Znajdź ${categoryLabel}: ${label}`;
-  }
-  return `Znajdź ${label}`;
-}
-
 export function BaseItem({ values, style, renderContent, getItemLabel, categoryLabel = '' }) {
+  const t = useT();
   const queryParams = new URLSearchParams(window.location.search);
   const requestedTilesCount = parseInt(queryParams.get('count') || '1', 10);
   const randomize = queryParams.get('randomize') === '1';
@@ -46,6 +41,16 @@ export function BaseItem({ values, style, renderContent, getItemLabel, categoryL
   const labelFor = useCallback(
     (item) => (getItemLabel ? getItemLabel(item) : String(item)),
     [getItemLabel]
+  );
+
+  const quizPromptSpeech = useCallback(
+    (label) => {
+      if (categoryLabel) {
+        return t('quiz.findWithCategory', { category: categoryLabel, label });
+      }
+      return t('quiz.find', { label });
+    },
+    [categoryLabel, t]
   );
 
   const generateValues = useCallback(() => {
@@ -94,11 +99,21 @@ export function BaseItem({ values, style, renderContent, getItemLabel, categoryL
   useEffect(() => {
     if (soundEnabled && audioUnlocked && isQuizMode && correctItem) {
       const timer = setTimeout(() => {
-        speak(buildQuizPrompt(labelFor(correctItem), categoryLabel));
+        speak(quizPromptSpeech(labelFor(correctItem)));
       }, 400);
       return () => clearTimeout(timer);
     }
-  }, [isQuizMode, correctItem, currentSequenceIdx, correctIndex, soundEnabled, audioUnlocked, speak, labelFor, categoryLabel]);
+  }, [
+    isQuizMode,
+    correctItem,
+    currentSequenceIdx,
+    correctIndex,
+    soundEnabled,
+    audioUnlocked,
+    speak,
+    labelFor,
+    quizPromptSpeech,
+  ]);
 
   useEffect(() => {
     return () => {
@@ -151,20 +166,31 @@ export function BaseItem({ values, style, renderContent, getItemLabel, categoryL
       if (tileIdx === correctIndex) {
         setIsLocked(true);
         if (soundEnabled) {
-          speak('Brawo!');
+          speak(t('feedback.success'));
           playSuccess();
         }
         showFeedback('success', advanceToNext);
       } else {
         setWrongTileIdx(tileIdx);
         if (soundEnabled) {
-          speak('Spróbuj jeszcze raz');
+          speak(t('feedback.wrongSpeech'));
           playWrong();
         }
         showFeedback('wrong');
       }
     },
-    [isLocked, correctItem, correctIndex, soundEnabled, speak, playSuccess, playWrong, showFeedback, advanceToNext]
+    [
+      isLocked,
+      correctItem,
+      correctIndex,
+      soundEnabled,
+      speak,
+      playSuccess,
+      playWrong,
+      showFeedback,
+      advanceToNext,
+      t,
+    ]
   );
 
   const handleTileClick = isQuizMode ? handleQuizClick : () => handleLearnClick();
@@ -181,7 +207,7 @@ export function BaseItem({ values, style, renderContent, getItemLabel, categoryL
     return (
       <div className="base-item-container">
         <BackButton />
-        <p className="base-item-message">Brak elementów do nauki.</p>
+        <p className="base-item-message">{t('base.empty')}</p>
       </div>
     );
   }
@@ -190,9 +216,7 @@ export function BaseItem({ values, style, renderContent, getItemLabel, categoryL
     return (
       <div className="base-item-container">
         <BackButton />
-        <p className="base-item-message">
-          Za mało elementów do quizu. Wyłącz tryb quizu w menu.
-        </p>
+        <p className="base-item-message">{t('base.quizTooFew')}</p>
       </div>
     );
   }
@@ -217,7 +241,10 @@ export function BaseItem({ values, style, renderContent, getItemLabel, categoryL
 
       {isQuizMode && correctLabel && (
         <div className={`quiz-prompt${soundEnabled && permissionIssue ? ' quiz-prompt-below-alert' : ''}`}>
-          Znajdź{categoryLabel ? ` ${categoryLabel}` : ''}: <strong>{correctLabel}</strong>
+          {categoryLabel
+            ? t('quiz.findWithCategoryPrefix', { category: categoryLabel })
+            : t('quiz.findPrefix')}
+          <strong>{correctLabel}</strong>
         </div>
       )}
 

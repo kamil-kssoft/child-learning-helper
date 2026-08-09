@@ -32,6 +32,12 @@ describe('audioPermissions', () => {
     expect(message).toMatch(/autoplay/i);
   });
 
+  test('messageForIssue returns English guidance when locale is en', () => {
+    const message = messageForIssue(ISSUE_BLOCKED, 'en');
+    expect(message).toMatch(/blocking sound/i);
+    expect(message).toMatch(/autoplay/i);
+  });
+
   test('detectAudioPermissionIssue reports unsupported without speech API', async () => {
     delete window.speechSynthesis;
     delete window.SpeechSynthesisUtterance;

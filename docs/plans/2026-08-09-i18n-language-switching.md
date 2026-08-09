@@ -224,3 +224,9 @@ Checklist na język:
 3. **PR C:** włoski  
 
 Ten dokument = akceptacja kierunku przed kodem PR A.
+
+## Status wdrożenia
+
+- [x] Faza 1 — fundament i18n + UI PL/EN + speech `lang` + switcher
+- [x] Faza 2 — treść nauki PL + EN we wszystkich kategoriach
+- [ ] Faza 3 — włoski

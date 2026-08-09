@@ -1,9 +1,12 @@
 import { Link } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import PwaInstallBanner from './PwaInstallBanner';
+import LanguageSwitcher from './LanguageSwitcher';
+import { useT } from '../i18n/LocaleContext';
 import './Menu.css';
 
 function Menu() {
+  const t = useT();
   const [randomize, setRandomize] = useState(() =>
     JSON.parse(localStorage.getItem('randomize') || 'false')
   );
@@ -20,44 +23,47 @@ function Menu() {
     localStorage.setItem('quizCount', JSON.stringify(quizCount));
   }, [randomize, testMode, quizCount]);
 
-  const menuSections = [
-    {
-      title: 'Podstawy',
-      items: [
-        { label: 'Cyfry 0–40', icon: '🔢', path: '/learn?start=0&stop=40' },
-        { label: 'Wielkie litery A–Z', icon: '🔤', path: '/learn?start=A&stop=Z' },
-        { label: 'Małe litery a–z', icon: '🔡', path: '/learn?start=a&stop=z' },
-        { label: 'Kolory', icon: '🎨', path: '/colors?a=1' },
-      ],
-    },
-    {
-      title: 'Zwierzęta i natura',
-      items: [
-        { label: 'Zwierzęta', icon: '🐾', path: '/image?a=1' },
-        { label: 'Owoce', icon: '🍎', path: '/fruits?a=1' },
-      ],
-    },
-    {
-      title: 'Kształty i liczenie',
-      items: [
-        { label: 'Kształty', icon: '🔷', path: '/shapes?a=1' },
-        { label: 'Liczenie', icon: '🔢', path: '/counting?a=1' },
-      ],
-    },
-    {
-      title: 'Pojazdy',
-      items: [
-        { label: 'Pojazdy', icon: '🚗', path: '/vehicles?a=1' },
-        { label: 'Marki aut', icon: '🚘', path: '/car-brands?a=1' },
-      ],
-    },
-    {
-      title: 'Emocje',
-      items: [
-        { label: 'Emocje', icon: '😊', path: '/emotions?a=1' },
-      ],
-    },
-  ];
+  const menuSections = useMemo(
+    () => [
+      {
+        titleKey: 'menu.section.basics',
+        items: [
+          { labelKey: 'menu.item.numbers', icon: '🔢', path: '/learn?start=0&stop=40' },
+          { labelKey: 'menu.item.uppercase', icon: '🔤', path: '/learn?start=A&stop=Z' },
+          { labelKey: 'menu.item.lowercase', icon: '🔡', path: '/learn?start=a&stop=z' },
+          { labelKey: 'menu.item.colors', icon: '🎨', path: '/colors?a=1' },
+        ],
+      },
+      {
+        titleKey: 'menu.section.animalsNature',
+        items: [
+          { labelKey: 'menu.item.animals', icon: '🐾', path: '/image?a=1' },
+          { labelKey: 'menu.item.fruits', icon: '🍎', path: '/fruits?a=1' },
+        ],
+      },
+      {
+        titleKey: 'menu.section.shapesCounting',
+        items: [
+          { labelKey: 'menu.item.shapes', icon: '🔷', path: '/shapes?a=1' },
+          { labelKey: 'menu.item.counting', icon: '🔢', path: '/counting?a=1' },
+        ],
+      },
+      {
+        titleKey: 'menu.section.vehicles',
+        items: [
+          { labelKey: 'menu.item.vehicles', icon: '🚗', path: '/vehicles?a=1' },
+          { labelKey: 'menu.item.carBrands', icon: '🚘', path: '/car-brands?a=1' },
+        ],
+      },
+      {
+        titleKey: 'menu.section.emotions',
+        items: [
+          { labelKey: 'menu.item.emotions', icon: '😊', path: '/emotions?a=1' },
+        ],
+      },
+    ],
+    []
+  );
 
   const getPath = (basePath) => {
     const randomizeMode = randomize ? 1 : 0;
@@ -67,18 +73,20 @@ function Menu() {
 
   return (
     <div className="menu-container">
-      <h1 className="menu-title">🌈 Zabawa w naukę</h1>
+      <h1 className="menu-title">{t('menu.title')}</h1>
 
       <PwaInstallBanner />
 
       <div className="options-container">
+        <LanguageSwitcher />
+
         <label className="option-label">
           <input
             type="checkbox"
             checked={randomize}
             onChange={(e) => setRandomize(e.target.checked)}
           />
-          Losuj kolejność
+          {t('menu.randomize')}
         </label>
         <div className="form-check form-switch option-label">
           <input
@@ -89,13 +97,13 @@ function Menu() {
             onChange={(e) => setTestMode(e.target.checked)}
           />
           <label className="form-check-label" htmlFor="testModeSwitch">
-            {testMode ? 'Quiz' : 'Ucz się'}
+            {testMode ? t('menu.quiz') : t('menu.learn')}
           </label>
         </div>
 
         {testMode && (
           <label className="option-label">
-            Liczba elementów:
+            {t('menu.quizCount')}
             <input
               type="number"
               className="form-control"
@@ -110,17 +118,17 @@ function Menu() {
 
         <Link to="/sound" className="menu-settings-link">
           <span className="menu-icon">🔊</span>
-          Ustawienia dźwięku
+          {t('menu.soundSettings')}
         </Link>
       </div>
 
       {menuSections.map((section) => (
-        <div key={section.title} className="menu-section">
-          <h2 className="menu-section-title">{section.title}</h2>
-          {section.items.map((item, index) => (
-            <Link key={index} to={getPath(item.path)} className="menu-item">
+        <div key={section.titleKey} className="menu-section">
+          <h2 className="menu-section-title">{t(section.titleKey)}</h2>
+          {section.items.map((item) => (
+            <Link key={item.labelKey} to={getPath(item.path)} className="menu-item">
               <span className="menu-icon">{item.icon}</span>
-              {item.label}
+              {t(item.labelKey)}
             </Link>
           ))}
         </div>

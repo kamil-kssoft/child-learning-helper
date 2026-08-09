@@ -1,9 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { DEFAULT_SPEECH_RATE } from '../utils/audioSettings';
-import { unlockAudioPlayback } from '../utils/speech';
 import PwaInstallBanner from './PwaInstallBanner';
-import SoundPermissionMessage from './SoundPermissionMessage';
 import './Menu.css';
 
 function Menu() {
@@ -16,33 +13,12 @@ function Menu() {
   const [quizCount, setQuizCount] = useState(() =>
     JSON.parse(localStorage.getItem('quizCount') || '2')
   );
-  const [soundEnabled, setSoundEnabled] = useState(() =>
-    JSON.parse(localStorage.getItem('soundEnabled') ?? 'true')
-  );
-  const [speechRate, setSpeechRate] = useState(() =>
-    JSON.parse(localStorage.getItem('speechRate') ?? String(DEFAULT_SPEECH_RATE))
-  );
-  const [permissionIssue, setPermissionIssue] = useState(null);
 
   useEffect(() => {
     localStorage.setItem('randomize', JSON.stringify(randomize));
     localStorage.setItem('testMode', JSON.stringify(testMode));
     localStorage.setItem('quizCount', JSON.stringify(quizCount));
-    localStorage.setItem('soundEnabled', JSON.stringify(soundEnabled));
-    localStorage.setItem('speechRate', JSON.stringify(speechRate));
-  }, [randomize, testMode, quizCount, soundEnabled, speechRate]);
-
-  useEffect(() => {
-    if (!soundEnabled) {
-      setPermissionIssue(null);
-    }
-  }, [soundEnabled]);
-
-  const checkSoundPermission = async () => {
-    const result = await unlockAudioPlayback();
-    setPermissionIssue(result?.issue || null);
-    return result;
-  };
+  }, [randomize, testMode, quizCount]);
 
   const menuSections = [
     {
@@ -132,60 +108,17 @@ function Menu() {
           </label>
         )}
 
-        <label className="option-label">
-          <input
-            type="checkbox"
-            checked={soundEnabled}
-            onChange={async (e) => {
-              const enabled = e.target.checked;
-              setSoundEnabled(enabled);
-              if (enabled) {
-                await checkSoundPermission();
-              } else {
-                setPermissionIssue(null);
-              }
-            }}
-          />
-          Dźwięk włączony
-        </label>
-
-        {soundEnabled && (
-          <label className="option-label option-label-column">
-            <span>Tempo mowy: {speechRate.toFixed(2)}</span>
-            <input
-              type="range"
-              className="speech-rate-slider"
-              min="0.5"
-              max="1.2"
-              step="0.05"
-              value={speechRate}
-              onChange={(e) => setSpeechRate(Number(e.target.value))}
-            />
-          </label>
-        )}
-
-        {soundEnabled && (
-          <SoundPermissionMessage
-            issue={permissionIssue}
-            onDismiss={() => setPermissionIssue(null)}
-          />
-        )}
+        <Link to="/sound" className="menu-settings-link">
+          <span className="menu-icon">🔊</span>
+          Ustawienia dźwięku
+        </Link>
       </div>
 
       {menuSections.map((section) => (
         <div key={section.title} className="menu-section">
           <h2 className="menu-section-title">{section.title}</h2>
           {section.items.map((item, index) => (
-            <Link
-              key={index}
-              to={getPath(item.path)}
-              className="menu-item"
-              onClick={() => {
-                if (soundEnabled) {
-                  checkSoundPermission();
-                }
-              }}
-            >
+            <Link key={index} to={getPath(item.path)} className="menu-item">
               <span className="menu-icon">{item.icon}</span>
               {item.label}
             </Link>

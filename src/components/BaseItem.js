@@ -61,13 +61,23 @@ export function BaseItem({ values, style, renderContent, getItemLabel, categoryL
   const learnItem = currentItems[0];
 
   useEffect(() => {
-    if (soundEnabled && !isQuizMode && learnItem) {
-      const timer = setTimeout(() => {
-        speak(labelFor(learnItem));
-      }, 300);
-      return () => clearTimeout(timer);
-    }
-  }, [currentSequenceIdx, learnItem, isQuizMode, soundEnabled, speak, labelFor]);
+    if (isQuizMode || !learnItem) return;
+
+    let cancelled = false;
+    setIsAdvancing(true);
+
+    const timer = setTimeout(async () => {
+      await speak(labelFor(learnItem));
+      if (!cancelled) setIsAdvancing(false);
+    }, 300);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+      window.speechSynthesis?.cancel();
+      setIsAdvancing(false);
+    };
+  }, [currentSequenceIdx, learnItem, isQuizMode, speak, labelFor]);
 
   useEffect(() => {
     if (soundEnabled && isQuizMode && correctItem) {
@@ -110,22 +120,10 @@ export function BaseItem({ values, style, renderContent, getItemLabel, categoryL
     }, type === 'success' ? 1200 : 800);
   }, []);
 
-  const handleLearnClick = useCallback(async () => {
+  const handleLearnClick = useCallback(() => {
     if (isAdvancing || currentItems.length === 0) return;
-
-    if (!soundEnabled) {
-      advanceToNext();
-      return;
-    }
-
-    setIsAdvancing(true);
-    try {
-      await speak(labelFor(currentItems[0]));
-      advanceToNext();
-    } finally {
-      setIsAdvancing(false);
-    }
-  }, [isAdvancing, currentItems, soundEnabled, speak, labelFor, advanceToNext]);
+    advanceToNext();
+  }, [isAdvancing, currentItems, advanceToNext]);
 
   const handleQuizClick = useCallback(
     (tileIdx) => {

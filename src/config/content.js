@@ -276,22 +276,17 @@ const flagItems = [
   { value: '🇮🇪', labels: { pl: 'Irlandia', en: 'Ireland' } },
   { value: '🇫🇮', labels: { pl: 'Finlandia', en: 'Finland' } },
   { value: '🇸🇰', labels: { pl: 'Słowacja', en: 'Slovakia' } },
-  { value: '🇸🇮', labels: { pl: 'Słowenia', en: 'Slovenia' } },
   { value: '🇷🇴', labels: { pl: 'Rumunia', en: 'Romania' } },
   { value: '🇧🇬', labels: { pl: 'Bułgaria', en: 'Bulgaria' } },
   { value: '🇪🇪', labels: { pl: 'Estonia', en: 'Estonia' } },
   { value: '🇱🇻', labels: { pl: 'Łotwa', en: 'Latvia' } },
   { value: '🇱🇹', labels: { pl: 'Litwa', en: 'Lithuania' } },
-  { value: '🇱🇺', labels: { pl: 'Luksemburg', en: 'Luxembourg' } },
-  { value: '🇲🇹', labels: { pl: 'Malta', en: 'Malta' } },
   { value: '🇨🇾', labels: { pl: 'Cypr', en: 'Cyprus' } },
-  { value: '🇷🇸', labels: { pl: 'Serbia', en: 'Serbia' } },
   { value: '🇺🇦', labels: { pl: 'Ukraina', en: 'Ukraine' } },
   { value: '🇦🇱', labels: { pl: 'Albania', en: 'Albania' } },
   { value: '🇧🇦', labels: { pl: 'Bośnia i Hercegowina', en: 'Bosnia and Herzegovina' } },
   { value: '🇲🇰', labels: { pl: 'Macedonia Północna', en: 'North Macedonia' } },
   { value: '🇲🇪', labels: { pl: 'Czarnogóra', en: 'Montenegro' } },
-  { value: '🇲🇩', labels: { pl: 'Mołdawia', en: 'Moldova' } },
 ];
 
 const carBrandItems = [

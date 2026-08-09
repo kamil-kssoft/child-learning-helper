@@ -122,18 +122,20 @@ function Menu() {
           Dźwięk włączony
         </label>
 
-        <label className="option-label option-label-column">
-          <span>Tempo mowy: {speechRate.toFixed(2)}</span>
-          <input
-            type="range"
-            className="speech-rate-slider"
-            min="0.5"
-            max="1.2"
-            step="0.05"
-            value={speechRate}
-            onChange={(e) => setSpeechRate(Number(e.target.value))}
-          />
-        </label>
+        {soundEnabled && (
+          <label className="option-label option-label-column">
+            <span>Tempo mowy: {speechRate.toFixed(2)}</span>
+            <input
+              type="range"
+              className="speech-rate-slider"
+              min="0.5"
+              max="1.2"
+              step="0.05"
+              value={speechRate}
+              onChange={(e) => setSpeechRate(Number(e.target.value))}
+            />
+          </label>
+        )}
       </div>
 
       {menuSections.map((section) => (

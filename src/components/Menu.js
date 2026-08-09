@@ -35,6 +35,8 @@ function Menu() {
       items: [
         { label: 'Zwierzęta', icon: '🐾', path: '/image?a=1' },
         { label: 'Owoce', icon: '🍎', path: '/fruits?a=1' },
+        { label: 'Warzywa', icon: '🥕', path: '/vegetables?a=1' },
+        { label: 'Pogoda', icon: '☀️', path: '/weather?a=1' },
       ],
     },
     {
@@ -55,6 +57,23 @@ function Menu() {
       title: 'Emocje',
       items: [
         { label: 'Emocje', icon: '😊', path: '/emotions?a=1' },
+      ],
+    },
+    {
+      title: 'Codzienność',
+      items: [
+        { label: 'Części ciała', icon: '👀', path: '/body-parts?a=1' },
+        { label: 'Ubrania', icon: '👕', path: '/clothes?a=1' },
+        { label: 'Dom i przedmioty', icon: '🏠', path: '/home?a=1' },
+        { label: 'Zawody', icon: '👨‍⚕️', path: '/professions?a=1' },
+      ],
+    },
+    {
+      title: 'Świat i zabawa',
+      items: [
+        { label: 'Kosmos', icon: '🚀', path: '/space?a=1' },
+        { label: 'Sport', icon: '⚽', path: '/sports?a=1' },
+        { label: 'Instrumenty', icon: '🎸', path: '/instruments?a=1' },
       ],
     },
   ];

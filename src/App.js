@@ -5,6 +5,15 @@ import Learn from './components/Learn';
 import Image from './components/Image';
 import Shapes from './components/Shapes';
 import Fruits from './components/Fruits';
+import Vegetables from './components/Vegetables';
+import Weather from './components/Weather';
+import BodyParts from './components/BodyParts';
+import Clothes from './components/Clothes';
+import Professions from './components/Professions';
+import HomeItems from './components/HomeItems';
+import Space from './components/Space';
+import Sports from './components/Sports';
+import Instruments from './components/Instruments';
 import Vehicles from './components/Vehicles';
 import CarBrands from './components/CarBrands';
 import Emotions from './components/Emotions';
@@ -24,6 +33,15 @@ function App() {
         <Route path="/image" element={<Image />} />
         <Route path="/shapes" element={<Shapes />} />
         <Route path="/fruits" element={<Fruits />} />
+        <Route path="/vegetables" element={<Vegetables />} />
+        <Route path="/weather" element={<Weather />} />
+        <Route path="/body-parts" element={<BodyParts />} />
+        <Route path="/clothes" element={<Clothes />} />
+        <Route path="/professions" element={<Professions />} />
+        <Route path="/home" element={<HomeItems />} />
+        <Route path="/space" element={<Space />} />
+        <Route path="/sports" element={<Sports />} />
+        <Route path="/instruments" element={<Instruments />} />
         <Route path="/vehicles" element={<Vehicles />} />
         <Route path="/car-brands" element={<CarBrands />} />
         <Route path="/emotions" element={<Emotions />} />

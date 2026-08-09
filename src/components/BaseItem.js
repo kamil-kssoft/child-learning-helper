@@ -121,7 +121,14 @@ export function BaseItem({ values, style, renderContent, getItemLabel, categoryL
   }, []);
 
   const handleLearnClick = useCallback(() => {
-    if (isAdvancing || currentItems.length === 0) return;
+    if (currentItems.length === 0) return;
+
+    // Allow tap-to-skip while announcing. On older phones speechSynthesis can
+    // hang without onend; without this the tile stays locked forever.
+    if (isAdvancing) {
+      window.speechSynthesis?.cancel();
+    }
+
     advanceToNext();
   }, [isAdvancing, currentItems, advanceToNext]);
 

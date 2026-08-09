@@ -45,11 +45,6 @@ const pl = {
   'feedback.wrong': 'Spróbuj jeszcze raz!',
   'feedback.wrongSpeech': 'Spróbuj jeszcze raz',
 
-  'quiz.find': 'Znajdź: {label}',
-  'quiz.findWithCategory': 'Znajdź {category}: {label}',
-  'quiz.findPrefix': 'Znajdź: ',
-  'quiz.findWithCategoryPrefix': 'Znajdź {category}: ',
-
   'category.number': 'cyfrę',
   'category.letter': 'literę',
   'category.color': 'kolor',

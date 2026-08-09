@@ -13,6 +13,9 @@ const pl = {
   'menu.section.emotions': 'Emocje',
   'menu.section.dailyLife': 'Codzienność',
   'menu.section.worldPlay': 'Świat i zabawa',
+  'menu.section.language': 'Język',
+  'menu.item.basicWordsPlTo': 'Polski → {lang}',
+  'menu.item.basicWordsToPl': '{lang} → Polski',
   'menu.item.numbers': 'Cyfry 0–40',
   'menu.item.uppercase': 'Wielkie litery A–Z',
   'menu.item.lowercase': 'Małe litery a–z',
@@ -102,6 +105,15 @@ const pl = {
   'pwa.install.dismiss': 'Zamknij',
   'pwa.update.text': 'Dostępna nowa wersja aplikacji',
   'pwa.update.button': 'Odśwież',
+
+  'basicWords.levelTitle': 'Poziom {level} — {theme}',
+  'basicWords.direction.plToForeign': 'Polski → {lang}',
+  'basicWords.direction.foreignToPl': '{lang} → Polski',
+  'basicWords.level1.theme': 'Powitania',
+  'basicWords.level2.theme': 'Grzeczność',
+  'basicWords.level3.theme': 'Na co dzień',
+  'basicWords.level4.theme': 'Rodzina',
+  'basicWords.level5.theme': 'Dom i szkoła',
 };
 
 export default pl;

@@ -20,6 +20,13 @@ function getProgressKey(pathname = window.location.pathname, search = window.loc
     const stop = params.get('stop') || '40';
     return `learn:${start}-${stop}`;
   }
+  if (pathname === '/basic-words') {
+    const dir = params.get('dir');
+    const level = params.get('level');
+    if (dir && level) {
+      return `basic-words:${dir}:level-${level}`;
+    }
+  }
   return pathname.replace(/^\//, '') || 'unknown';
 }
 

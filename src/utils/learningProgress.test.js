@@ -21,6 +21,12 @@ describe('learningProgress', () => {
     expect(getProgressKey('/car-brands', '')).toBe('car-brands');
   });
 
+  it('derives progress key from basic-words route with level', () => {
+    expect(getProgressKey('/basic-words', '?dir=pl-to-en&level=2')).toBe(
+      'basic-words:pl-to-en:level-2'
+    );
+  });
+
   it('tracks completed items without duplicates', () => {
     markItemComplete('fruits', '🍎');
     markItemComplete('fruits', '🍎');

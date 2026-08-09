@@ -23,7 +23,6 @@ export function BaseItem({ values, style, renderContent, getItemLabel, categoryL
 
   const [currentSequences, setCurrentSequences] = useState([]);
   const [currentSequenceIdx, setCurrentSequenceIdx] = useState(0);
-  const [correctIndex, setCorrectIndex] = useState(0);
   const [feedback, setFeedback] = useState(null);
   const [wrongTileIdx, setWrongTileIdx] = useState(null);
   const [isLocked, setIsLocked] = useState(false);
@@ -58,19 +57,15 @@ export function BaseItem({ values, style, renderContent, getItemLabel, categoryL
     const currentSet = generateArrayWithSubitems(values, tilesCount, randomize);
     setCurrentSequences(currentSet);
     setCurrentSequenceIdx(0);
-    if (isQuizMode) {
-      setCorrectIndex(Math.floor(Math.random() * tilesCount));
-    }
-  }, [values, tilesCount, randomize, isQuizMode, requestedTilesCount]);
+  }, [values, tilesCount, randomize, requestedTilesCount]);
 
   useEffect(() => {
     generateValues();
   }, [generateValues]);
 
-  const currentItems = useMemo(
-    () => currentSequences[currentSequenceIdx] || [],
-    [currentSequences, currentSequenceIdx]
-  );
+  const currentRound = currentSequences[currentSequenceIdx];
+  const currentItems = currentRound?.items || [];
+  const correctIndex = currentRound?.correctIndex ?? 0;
   const correctItem = currentItems[correctIndex];
   const correctLabel = correctItem ? labelFor(correctItem) : '';
   const learnItem = currentItems[0];
@@ -133,13 +128,10 @@ export function BaseItem({ values, style, renderContent, getItemLabel, categoryL
   const advanceToNext = useCallback(() => {
     if (currentSequenceIdx < currentSequences.length - 1) {
       setCurrentSequenceIdx((prev) => prev + 1);
-      if (isQuizMode) {
-        setCorrectIndex(Math.floor(Math.random() * tilesCount));
-      }
       return;
     }
     generateValues();
-  }, [currentSequenceIdx, currentSequences.length, isQuizMode, tilesCount, generateValues]);
+  }, [currentSequenceIdx, currentSequences.length, generateValues]);
 
   const showFeedback = useCallback((type, onDone) => {
     setFeedback(type);

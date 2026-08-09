@@ -12,16 +12,22 @@ function buildQuizRound(values, target, tilesCount) {
     0,
     tilesCount - 1
   );
-  return shuffleArray([target, ...distractors]);
+  const items = shuffleArray([target, ...distractors]);
+  return {
+    items,
+    correctIndex: items.indexOf(target),
+  };
 }
 
 function generateArrayWithSubitems(array, subitemsCount, randomize) {
+  const sequence = randomize ? shuffleArray(array) : [...array];
+
   if (subitemsCount === 1) {
-    const sequence = randomize ? shuffleArray(array) : [...array];
-    return sequence.map((item) => [item]);
+    return sequence.map((item) => ({ items: [item], correctIndex: 0 }));
   }
 
-  const sequence = randomize ? shuffleArray(array) : [...array];
+  // Each value is the unique correct answer exactly once; remaining tiles
+  // are arbitrary other items (distractors may repeat across rounds).
   return sequence.map((target) => buildQuizRound(array, target, subitemsCount));
 }
 

@@ -1,3 +1,17 @@
+# CI/CD — child-learning (static SPA on henryk179)
+#
+# Required GitHub Secrets:
+#   VPS_SSH_KEY          — private SSH key
+#   REGISTRY_USERNAME    — docker login for registry.kssoft.com.pl:30358
+#   REGISTRY_PASSWORD    — registry password/token
+#
+# Required GitHub Variables:
+#   CONTAINER_REGISTRY_URL — registry.kssoft.com.pl:30358
+#   VPS_HOST               — henryk179.mikrus.xyz
+#   VPS_USER               — root
+#   VPS_PORT               — 10179
+#   VPS_DEPLOY_PATH        — /opt/child-learn
+
 name: CI/CD
 
 on:
@@ -6,16 +20,57 @@ on:
   workflow_dispatch:
 
 jobs:
-  cicd:
-    uses: kamil-kssoft/pipelines/.github/workflows/ci-cd-vps.yml@main
-    with:
-      deployment-type: docker-registry
-      deploy-branch: master
-      vps-deploy-path: /opt/child-learn
-      copy-compose-via-scp: true
-      compose-file: docker-compose.prod.yml
-      images-json: |
-        [
-          {"context": ".", "file": "./Dockerfile", "image": "child-learning"}
-        ]
-    secrets: inherit
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ${{ vars.CONTAINER_REGISTRY_URL }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: linux/amd64
+          push: true
+          tags: ${{ vars.CONTAINER_REGISTRY_URL }}/child-learning:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ vars.VPS_HOST }}
+          username: ${{ vars.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ vars.VPS_PORT }}
+          source: docker-compose.prod.yml
+          target: ${{ vars.VPS_DEPLOY_PATH }}/
+
+      - uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ vars.VPS_HOST }}
+          username: ${{ vars.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ vars.VPS_PORT }}
+          script: |
+            set -e
+            cd ${{ vars.VPS_DEPLOY_PATH }}
+            docker compose -f docker-compose.prod.yml pull || {
+              echo "docker compose pull failed — run 'docker login' for the registry on the VPS"
+              exit 1
+            }
+            docker compose -f docker-compose.prod.yml up -d
+            docker compose -f docker-compose.prod.yml ps
+            docker image prune -f

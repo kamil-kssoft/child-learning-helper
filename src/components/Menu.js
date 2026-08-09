@@ -57,6 +57,7 @@ function Menu() {
       title: 'Pojazdy',
       items: [
         { label: 'Pojazdy', icon: '🚗', path: '/vehicles?a=1' },
+        { label: 'Marki aut', icon: '🚘', path: '/car-brands?a=1' },
       ],
     },
     {

@@ -8,7 +8,7 @@ import {
 } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
 import { CacheFirst, StaleWhileRevalidate } from 'workbox-strategies';
-import { animalFilenames } from './config/content';
+import { animalFilenames, carBrandFilenames } from './config/content';
 import { imageRevisions } from './config/imageRevisions';
 
 clientsClaim();
@@ -19,11 +19,13 @@ self.addEventListener('message', (event) => {
   }
 });
 
-const ANIMAL_IMAGES = animalFilenames.map((file) => `/img/${file}`);
+const PRECACHE_IMAGES = [...animalFilenames, ...carBrandFilenames].map(
+  (file) => `/img/${file}`
+);
 
 precacheAndRoute(
   self.__WB_MANIFEST.concat(
-    ANIMAL_IMAGES.map((url) => ({ url, revision: imageRevisions[url] }))
+    PRECACHE_IMAGES.map((url) => ({ url, revision: imageRevisions[url] }))
   )
 );
 
@@ -53,7 +55,7 @@ registerRoute(
     cacheName: 'static-images',
     plugins: [
       new ExpirationPlugin({
-        maxEntries: 100,
+        maxEntries: 200,
         maxAgeSeconds: 365 * 24 * 60 * 60,
       }),
     ],

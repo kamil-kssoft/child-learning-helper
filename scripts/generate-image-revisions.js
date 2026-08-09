@@ -7,16 +7,22 @@ const imgDir = path.join(__dirname, '../public/img');
 const outputPath = path.join(__dirname, '../src/config/imageRevisions.js');
 
 const content = fs.readFileSync(contentPath, 'utf8');
-const animalSection = content.match(/const animalItems = \[([\s\S]*?)\];/);
 
-if (!animalSection) {
-  console.error('Could not parse animalItems from content.js');
-  process.exit(1);
+function parseItemValues(constName) {
+  const section = content.match(
+    new RegExp(`const ${constName} = \\[([\\s\\S]*?)\\];`)
+  );
+  if (!section) {
+    console.error(`Could not parse ${constName} from content.js`);
+    process.exit(1);
+  }
+  return [...section[1].matchAll(/value:\s*'([^']+)'/g)].map((match) => match[1]);
 }
 
-const filenames = [...animalSection[1].matchAll(/value:\s*'([^']+)'/g)].map(
-  (match) => match[1]
-);
+const filenames = [
+  ...parseItemValues('animalItems'),
+  ...parseItemValues('carBrandItems'),
+];
 
 const imageRevisions = {};
 

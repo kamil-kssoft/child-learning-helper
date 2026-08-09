@@ -1,10 +1,12 @@
 import { DEFAULT_LOCALE, normalizeLocale } from './locales';
 import pl from './ui/pl';
 import en from './ui/en';
+import it from './ui/it';
 
 const UI_MESSAGES = {
   pl,
   en,
+  it,
 };
 
 function interpolate(template, params = {}) {

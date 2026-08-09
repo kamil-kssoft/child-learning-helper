@@ -16,8 +16,13 @@ describe('localeSettings', () => {
     expect(getStoredLocale()).toBe('en');
   });
 
+  test('persists Italian locale', () => {
+    expect(setStoredLocale('it')).toBe('it');
+    expect(getStoredLocale()).toBe('it');
+  });
+
   test('normalizes unsupported values to default', () => {
-    expect(setStoredLocale('it')).toBe(DEFAULT_LOCALE);
+    expect(setStoredLocale('de')).toBe(DEFAULT_LOCALE);
     expect(getStoredLocale()).toBe(DEFAULT_LOCALE);
   });
 });

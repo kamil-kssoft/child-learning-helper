@@ -1,3 +1,5 @@
+import fs from 'fs';
+import path from 'path';
 import { translate, resolveLocalizedValue, interpolate } from './translate';
 import {
   colorItems,
@@ -79,6 +81,34 @@ describe('content labels', () => {
     expect(getItemLabel(red, 'pl')).toBe('czerwony');
     expect(getItemLabel(red, 'en')).toBe('red');
     expect(getItemLabel(red, 'it')).toBe('rosso');
+  });
+
+  test('body parts category includes chart organs and omit reproductive organs', () => {
+    expect(bodyPartItems.length).toBe(18);
+    const labels = bodyPartItems.map((item) => item.labels.pl);
+    expect(labels.slice(0, 8)).toEqual([
+      'oczy', 'nos', 'ucho', 'usta', 'ręka', 'noga', 'stopa', 'głowa',
+    ]);
+    expect(labels).toEqual(expect.arrayContaining([
+      'mózg',
+      'tarczyca',
+      'płuca',
+      'serce',
+      'wątroba',
+      'żołądek',
+      'trzustka',
+      'nerki',
+      'jelita',
+      'pęcherz',
+    ]));
+    expect(labels.join(' ')).not.toMatch(/rozrod|jądr|jajnik|macic|penis|pochw|nosogard|grasic/i);
+
+    const images = bodyPartItems.filter((item) => String(item.value).endsWith('.png'));
+    expect(images).toHaveLength(10);
+    images.forEach((item) => {
+      const filePath = path.join(__dirname, '../../public/img', item.value);
+      expect(fs.existsSync(filePath)).toBe(true);
+    });
   });
 
   test('number and letter labels switch by locale', () => {

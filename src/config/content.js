@@ -164,6 +164,16 @@ const bodyPartItems = [
   { value: '🦵', labels: { pl: 'noga', en: 'leg', it: 'gamba' } },
   { value: '🦶', labels: { pl: 'stopa', en: 'foot', it: 'piede' } },
   { value: '🧠', labels: { pl: 'głowa', en: 'head', it: 'testa' } },
+  { value: 'body-parts/mozg.png', labels: { pl: 'mózg', en: 'brain', it: 'cervello' } },
+  { value: 'body-parts/tarczyca.png', labels: { pl: 'tarczyca', en: 'thyroid', it: 'tiroide' } },
+  { value: 'body-parts/pluca.png', labels: { pl: 'płuca', en: 'lungs', it: 'polmoni' } },
+  { value: 'body-parts/serce.png', labels: { pl: 'serce', en: 'heart', it: 'cuore' } },
+  { value: 'body-parts/watroba.png', labels: { pl: 'wątroba', en: 'liver', it: 'fegato' } },
+  { value: 'body-parts/zoladek.png', labels: { pl: 'żołądek', en: 'stomach', it: 'stomaco' } },
+  { value: 'body-parts/trzustka.png', labels: { pl: 'trzustka', en: 'pancreas', it: 'pancreas' } },
+  { value: 'body-parts/nerki.png', labels: { pl: 'nerki', en: 'kidneys', it: 'reni' } },
+  { value: 'body-parts/jelita.png', labels: { pl: 'jelita', en: 'intestines', it: 'intestino' } },
+  { value: 'body-parts/pecherz.png', labels: { pl: 'pęcherz', en: 'bladder', it: 'vescica' } },
 ];
 
 const clothesItems = [
@@ -338,6 +348,9 @@ const carBrandItems = [
 
 const animalFilenames = animalItems.map((animal) => animal.value);
 const carBrandFilenames = carBrandItems.map((brand) => brand.value);
+const bodyPartImageFilenames = bodyPartItems
+  .map((item) => item.value)
+  .filter((value) => typeof value === 'string' && /\.(png|jpe?g|webp|gif|svg)$/i.test(value));
 
 function getItemLabel(item, locale = 'pl') {
   if (!item) return '';
@@ -369,6 +382,7 @@ export {
   colorItems,
   animalItems,
   animalFilenames,
+  bodyPartImageFilenames,
   flagItems,
   carBrandItems,
   carBrandFilenames,

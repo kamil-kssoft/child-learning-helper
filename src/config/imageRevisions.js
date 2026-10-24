@@ -61,5 +61,15 @@ export const imageRevisions = {
   "/img/car-brands/suzuki.png": "72f6abdbef45a693dd9fb776141b846f",
   "/img/car-brands/toyota.png": "0c02e3994443e7707ebd5d272e202152",
   "/img/car-brands/volkswagen.png": "fa7f32fccab5506eda7c7c180f3172c9",
-  "/img/car-brands/volvo.png": "0ae1f5feace2b0f51fd072c6c7ddf2b5"
+  "/img/car-brands/volvo.png": "0ae1f5feace2b0f51fd072c6c7ddf2b5",
+  "/img/body-parts/mozg.png": "73db18b7e155201e4d64c7baf4b23f70",
+  "/img/body-parts/tarczyca.png": "da2f864092319d78cf03768934ae916a",
+  "/img/body-parts/pluca.png": "3aacdab73a5b42411e6f0ed58575772c",
+  "/img/body-parts/serce.png": "c907afce2c855dd6d5735eb871b43fc1",
+  "/img/body-parts/watroba.png": "240a67c7ec6da7b57b95d5975967a3ce",
+  "/img/body-parts/zoladek.png": "ec7d42350a5de352dd92a2122982a789",
+  "/img/body-parts/trzustka.png": "d2c333ea319f3b5c8f0528f119219ba8",
+  "/img/body-parts/nerki.png": "6338b48ce4183ca0a6a255a01e2b52ee",
+  "/img/body-parts/jelita.png": "c74498da055f518c7cd390ff49d1b9a8",
+  "/img/body-parts/pecherz.png": "281f04c0b47f6cfe8d35ea4586cee67f"
 };

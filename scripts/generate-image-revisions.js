@@ -19,9 +19,12 @@ function parseItemValues(constName) {
   return [...section[1].matchAll(/value:\s*'([^']+)'/g)].map((match) => match[1]);
 }
 
+const imageValuePattern = /\.(png|jpe?g|webp|gif|svg)$/i;
+
 const filenames = [
   ...parseItemValues('animalItems'),
   ...parseItemValues('carBrandItems'),
+  ...parseItemValues('bodyPartItems').filter((filename) => imageValuePattern.test(filename)),
 ];
 
 const imageRevisions = {};

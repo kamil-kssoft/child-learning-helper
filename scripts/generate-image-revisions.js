@@ -22,6 +22,7 @@ function parseItemValues(constName) {
 const filenames = [
   ...parseItemValues('animalItems'),
   ...parseItemValues('carBrandItems'),
+  ...parseItemValues('organItems'),
 ];
 
 const imageRevisions = {};

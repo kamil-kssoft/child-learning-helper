@@ -8,7 +8,7 @@ import {
 } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
 import { CacheFirst, StaleWhileRevalidate } from 'workbox-strategies';
-import { animalFilenames, carBrandFilenames } from './config/content';
+import { animalFilenames, bodyPartImageFilenames, carBrandFilenames } from './config/content';
 import { imageRevisions } from './config/imageRevisions';
 
 clientsClaim();
@@ -19,7 +19,7 @@ self.addEventListener('message', (event) => {
   }
 });
 
-const PRECACHE_IMAGES = [...animalFilenames, ...carBrandFilenames].map(
+const PRECACHE_IMAGES = [...animalFilenames, ...carBrandFilenames, ...bodyPartImageFilenames].map(
   (file) => `/img/${file}`
 );
 

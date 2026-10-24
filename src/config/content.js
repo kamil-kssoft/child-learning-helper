@@ -155,6 +155,21 @@ const weatherItems = [
   { value: '🌤️', labels: { pl: 'pogodnie', en: 'partly sunny', it: 'parzialmente soleggiato' } },
 ];
 
+const organItems = [
+  { value: 'body-parts/mozg.png', labels: { pl: 'mózg', en: 'brain', it: 'cervello' } },
+  { value: 'body-parts/nosogardlo.png', labels: { pl: 'nosogardło', en: 'nasopharynx', it: 'rinofaringe' } },
+  { value: 'body-parts/tarczyca.png', labels: { pl: 'tarczyca', en: 'thyroid', it: 'tiroide' } },
+  { value: 'body-parts/grasica.png', labels: { pl: 'grasica', en: 'thymus', it: 'timo' } },
+  { value: 'body-parts/pluca.png', labels: { pl: 'płuca', en: 'lungs', it: 'polmoni' } },
+  { value: 'body-parts/serce.png', labels: { pl: 'serce', en: 'heart', it: 'cuore' } },
+  { value: 'body-parts/watroba.png', labels: { pl: 'wątroba', en: 'liver', it: 'fegato' } },
+  { value: 'body-parts/zoladek.png', labels: { pl: 'żołądek', en: 'stomach', it: 'stomaco' } },
+  { value: 'body-parts/trzustka.png', labels: { pl: 'trzustka', en: 'pancreas', it: 'pancreas' } },
+  { value: 'body-parts/nerki.png', labels: { pl: 'nerki', en: 'kidneys', it: 'reni' } },
+  { value: 'body-parts/jelita.png', labels: { pl: 'jelita', en: 'intestines', it: 'intestino' } },
+  { value: 'body-parts/pecherz.png', labels: { pl: 'pęcherz', en: 'bladder', it: 'vescica' } },
+];
+
 const bodyPartItems = [
   { value: '👀', labels: { pl: 'oczy', en: 'eyes', it: 'occhi' } },
   { value: '👃', labels: { pl: 'nos', en: 'nose', it: 'naso' } },
@@ -164,6 +179,7 @@ const bodyPartItems = [
   { value: '🦵', labels: { pl: 'noga', en: 'leg', it: 'gamba' } },
   { value: '🦶', labels: { pl: 'stopa', en: 'foot', it: 'piede' } },
   { value: '🧠', labels: { pl: 'głowa', en: 'head', it: 'testa' } },
+  ...organItems,
 ];
 
 const clothesItems = [
@@ -338,6 +354,7 @@ const carBrandItems = [
 
 const animalFilenames = animalItems.map((animal) => animal.value);
 const carBrandFilenames = carBrandItems.map((brand) => brand.value);
+const bodyPartImageFilenames = organItems.map((organ) => organ.value);
 
 function getItemLabel(item, locale = 'pl') {
   if (!item) return '';
@@ -369,6 +386,7 @@ export {
   colorItems,
   animalItems,
   animalFilenames,
+  bodyPartImageFilenames,
   flagItems,
   carBrandItems,
   carBrandFilenames,

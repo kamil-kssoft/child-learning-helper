@@ -155,7 +155,15 @@ const weatherItems = [
   { value: '🌤️', labels: { pl: 'pogodnie', en: 'partly sunny', it: 'parzialmente soleggiato' } },
 ];
 
-const organItems = [
+const bodyPartItems = [
+  { value: '👀', labels: { pl: 'oczy', en: 'eyes', it: 'occhi' } },
+  { value: '👃', labels: { pl: 'nos', en: 'nose', it: 'naso' } },
+  { value: '👂', labels: { pl: 'ucho', en: 'ear', it: 'orecchio' } },
+  { value: '👄', labels: { pl: 'usta', en: 'mouth', it: 'bocca' } },
+  { value: '✋', labels: { pl: 'ręka', en: 'hand', it: 'mano' } },
+  { value: '🦵', labels: { pl: 'noga', en: 'leg', it: 'gamba' } },
+  { value: '🦶', labels: { pl: 'stopa', en: 'foot', it: 'piede' } },
+  { value: '🧠', labels: { pl: 'głowa', en: 'head', it: 'testa' } },
   { value: 'body-parts/mozg.png', labels: { pl: 'mózg', en: 'brain', it: 'cervello' } },
   { value: 'body-parts/tarczyca.png', labels: { pl: 'tarczyca', en: 'thyroid', it: 'tiroide' } },
   { value: 'body-parts/pluca.png', labels: { pl: 'płuca', en: 'lungs', it: 'polmoni' } },
@@ -166,18 +174,6 @@ const organItems = [
   { value: 'body-parts/nerki.png', labels: { pl: 'nerki', en: 'kidneys', it: 'reni' } },
   { value: 'body-parts/jelita.png', labels: { pl: 'jelita', en: 'intestines', it: 'intestino' } },
   { value: 'body-parts/pecherz.png', labels: { pl: 'pęcherz', en: 'bladder', it: 'vescica' } },
-];
-
-const bodyPartItems = [
-  { value: '👀', labels: { pl: 'oczy', en: 'eyes', it: 'occhi' } },
-  { value: '👃', labels: { pl: 'nos', en: 'nose', it: 'naso' } },
-  { value: '👂', labels: { pl: 'ucho', en: 'ear', it: 'orecchio' } },
-  { value: '👄', labels: { pl: 'usta', en: 'mouth', it: 'bocca' } },
-  { value: '✋', labels: { pl: 'ręka', en: 'hand', it: 'mano' } },
-  { value: '🦵', labels: { pl: 'noga', en: 'leg', it: 'gamba' } },
-  { value: '🦶', labels: { pl: 'stopa', en: 'foot', it: 'piede' } },
-  { value: '🧠', labels: { pl: 'głowa', en: 'head', it: 'testa' } },
-  ...organItems,
 ];
 
 const clothesItems = [
@@ -352,7 +348,9 @@ const carBrandItems = [
 
 const animalFilenames = animalItems.map((animal) => animal.value);
 const carBrandFilenames = carBrandItems.map((brand) => brand.value);
-const bodyPartImageFilenames = organItems.map((organ) => organ.value);
+const bodyPartImageFilenames = bodyPartItems
+  .map((item) => item.value)
+  .filter((value) => typeof value === 'string' && /\.(png|jpe?g|webp|gif|svg)$/i.test(value));
 
 function getItemLabel(item, locale = 'pl') {
   if (!item) return '';

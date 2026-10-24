@@ -83,8 +83,12 @@ describe('content labels', () => {
     expect(getItemLabel(red, 'it')).toBe('rosso');
   });
 
-  test('body parts include chart organs and omit reproductive organs', () => {
+  test('body parts category includes chart organs and omit reproductive organs', () => {
+    expect(bodyPartItems.length).toBe(18);
     const labels = bodyPartItems.map((item) => item.labels.pl);
+    expect(labels.slice(0, 8)).toEqual([
+      'oczy', 'nos', 'ucho', 'usta', 'ręka', 'noga', 'stopa', 'głowa',
+    ]);
     expect(labels).toEqual(expect.arrayContaining([
       'mózg',
       'tarczyca',

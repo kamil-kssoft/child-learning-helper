@@ -87,9 +87,7 @@ describe('content labels', () => {
     const labels = bodyPartItems.map((item) => item.labels.pl);
     expect(labels).toEqual(expect.arrayContaining([
       'mózg',
-      'nosogardło',
       'tarczyca',
-      'grasica',
       'płuca',
       'serce',
       'wątroba',
@@ -99,10 +97,10 @@ describe('content labels', () => {
       'jelita',
       'pęcherz',
     ]));
-    expect(labels.join(' ')).not.toMatch(/rozrod|jądr|jajnik|macic|penis|pochw/i);
+    expect(labels.join(' ')).not.toMatch(/rozrod|jądr|jajnik|macic|penis|pochw|nosogard|grasic/i);
 
     const images = bodyPartItems.filter((item) => String(item.value).endsWith('.png'));
-    expect(images).toHaveLength(12);
+    expect(images).toHaveLength(10);
     images.forEach((item) => {
       const filePath = path.join(__dirname, '../../public/img', item.value);
       expect(fs.existsSync(filePath)).toBe(true);

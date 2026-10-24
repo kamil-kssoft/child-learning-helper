@@ -157,9 +157,7 @@ const weatherItems = [
 
 const organItems = [
   { value: 'body-parts/mozg.png', labels: { pl: 'mózg', en: 'brain', it: 'cervello' } },
-  { value: 'body-parts/nosogardlo.png', labels: { pl: 'nosogardło', en: 'nasopharynx', it: 'rinofaringe' } },
   { value: 'body-parts/tarczyca.png', labels: { pl: 'tarczyca', en: 'thyroid', it: 'tiroide' } },
-  { value: 'body-parts/grasica.png', labels: { pl: 'grasica', en: 'thymus', it: 'timo' } },
   { value: 'body-parts/pluca.png', labels: { pl: 'płuca', en: 'lungs', it: 'polmoni' } },
   { value: 'body-parts/serce.png', labels: { pl: 'serce', en: 'heart', it: 'cuore' } },
   { value: 'body-parts/watroba.png', labels: { pl: 'wątroba', en: 'liver', it: 'fegato' } },

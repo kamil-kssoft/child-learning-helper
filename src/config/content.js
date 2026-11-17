@@ -293,6 +293,8 @@ const flagItems = [
   { value: '🇱🇹', labels: { pl: 'Litwa', en: 'Lithuania', it: 'Lituania' } },
   { value: '🇺🇦', labels: { pl: 'Ukraina', en: 'Ukraine', it: 'Ucraina' } },
   { value: '🇦🇱', labels: { pl: 'Albania', en: 'Albania', it: 'Albania' } },
+  { value: '🇪🇺', labels: { pl: 'Europa', en: 'Europe', it: 'Europa' } },
+  { value: '🇲🇹', labels: { pl: 'Malta', en: 'Malta', it: 'Malta' } },
 ];
 
 const carBrandItems = [

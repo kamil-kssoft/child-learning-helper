@@ -8,7 +8,7 @@ COPY . .
 RUN npm run build
 
 # Production stage
-FROM nginx:alpine
+FROM nginx:1.31.9-alpine
 
 # SPA + PWA routing and cache headers
 COPY nginx.conf /etc/nginx/conf.d/default.conf
